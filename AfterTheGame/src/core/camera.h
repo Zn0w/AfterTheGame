@@ -14,4 +14,8 @@ public:
 	{}
 
 	bool captures(Entity& entity);
+
+	void clip(Entity& entity);
+	
+	void clip(sf::Vector2f entity);
 };

@@ -22,3 +22,16 @@ bool Camera::captures(Entity& entity)
 		object_y2 >= camera_y1
 		);
 }
+
+void Camera::clip(Entity& entity)
+{
+	sf::Vector2f entity_origin = entity.getOrigin();
+	x = entity_origin.x - width / 2;
+	y = entity_origin.y - height / 2;
+}
+
+void Camera::clip(sf::Vector2f position)
+{
+	x = position.x - width / 2;
+	y = position.y - height / 2;
+}

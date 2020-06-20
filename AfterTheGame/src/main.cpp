@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 
@@ -13,22 +14,45 @@
 bool running = false;
 Camera camera;
 std::vector<Entity*> entities;
+std::vector<sf::Texture*> textures;
+
+sf::Font font;
+sf::Text debug_text;
 
 
 void init()
 {
+	// load texture
+	sf::Texture* cabbage_texture = new sf::Texture;
+	if (!cabbage_texture->loadFromFile("resources/cabbage.png"))
+	{
+		// error...
+	}
+	textures.push_back(cabbage_texture);
+	
 	// init camera
 	camera = Camera(0, 0, WIDTH, HEIGHT);
+	camera.clip({0, 0});
 
 
 	// load test entities
 	for (int i = -10; i <= 10; i++)
 		for (int j = -10; j <= 10; j++)
 		{
-			entities.push_back(new Entity(100.0f * j, 100.0f * i, 50.0f, 50.0f));
+			entities.push_back(new Entity(100.0f * j, 100.0f * i, 50.0f, 50.0f, cabbage_texture));
 		}
 
 	running = true;
+
+	if (!font.loadFromFile("resources/sansation.ttf"))
+	{
+		// error...
+	}
+
+	debug_text.setFont(font);
+	debug_text.setCharacterSize(16);
+	debug_text.setFillColor(sf::Color::Red);
+	debug_text.setPosition(0, 0);
 }
 
 void get_input(float elapsed_time)
@@ -65,9 +89,9 @@ void update_and_render(sf::RenderWindow* window)
 			int render_x = WIDTH / 2 + offset_x;
 			int render_y = HEIGHT / 2 - offset_y;
 
-			entity->sprite.setSize(sf::Vector2f(entity->width, entity->height));
+			//entity->sprite.setSize(sf::Vector2f(entity->width, entity->height));
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
-			entity->sprite.setFillColor(sf::Color::Green);
+			//entity->sprite.setFillColor(sf::Color::Green);
 			window->draw(entity->sprite);
 		}
 	}
@@ -84,7 +108,7 @@ int main()
 	init();
 	
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "After");
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "After");
 
 	sf::Clock clock;
 
@@ -115,9 +139,11 @@ int main()
 
 		// draw everything here...
 		update_and_render(&window);
-		/*sf::CircleShape circle(50.0f);
-		circle.setFillColor(sf::Color::Cyan);
-		window.draw(circle);*/
+		
+		// display debug info
+		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")";
+		debug_text.setString(debug_string);
+		window.draw(debug_text);
 
 		// end the current frame
 		window.display();
