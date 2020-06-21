@@ -7,6 +7,7 @@
 
 #include "core/camera.h"
 #include "game_logic/player.h"
+#include "game_logic/horse.h"
 
 
 #define WIDTH 1280
@@ -150,6 +151,10 @@ void init()
 
 	player = aft::Player(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, hero_texture);
 	player.setOrigin({ WIDTH / 2, HEIGHT / 2 });
+
+	// spawn test npcs
+	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, hero_texture));
+	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, hero_texture));
 
 	running = true;
 
