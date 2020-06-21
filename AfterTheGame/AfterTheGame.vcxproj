@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\camera.cpp" />
+    <ClCompile Include="src\game_logic\player.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,9 @@
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\maths.h" />
     <ClInclude Include="src\core\world_object.h" />
+    <ClInclude Include="src\game_logic\interact_object.h" />
+    <ClInclude Include="src\game_logic\npc.h" />
+    <ClInclude Include="src\game_logic\player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

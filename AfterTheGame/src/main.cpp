@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "core/camera.h"
+#include "game_logic/player.h"
 
 
 #define WIDTH 1280
@@ -15,32 +16,95 @@ bool running = false;
 aft::core::Camera camera;
 std::vector<aft::core::Entity*> entities;
 std::vector<sf::Texture*> textures;
+aft::Player player;
 
 sf::Font font;
 sf::Text debug_text;
 
+std::string tilemap[20] = {
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmggggggggggggggggmm",
+	"mmggggggggggggggggmm",
+	"mmggwwwgggggggggggmm",
+	"mmggwwwgggggggggggmm",
+	"mmggwwwgggggggcgggmm",
+	"mmggggggggggggggggmm",
+	"mmggggcgggggggggggmm",
+	"mmggggggggggggwwggmm",
+	"mmggggggggggggwwggmm",
+	"mmggggggggcgggggggmm",
+	"mmggcgggggggggggcgmm",
+	"mmggggggwwwwwwwwggmm",
+	"mmmmmmmmwwwwwwwmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm",
+	"mmmmmmmmmmmmmmmmmmmm"
+};
+
 
 void init()
 {
-	// load texture
+	// load textures
 	sf::Texture* cabbage_texture = new sf::Texture;
 	if (!cabbage_texture->loadFromFile("resources/cabbage.png"))
 	{
 		// error...
 	}
 	textures.push_back(cabbage_texture);
+
+	sf::Texture* rock_texture = new sf::Texture;
+	if (!rock_texture->loadFromFile("resources/rock.png"))
+	{
+		// error...
+	}
+	textures.push_back(rock_texture);
+
+	sf::Texture* grass_texture = new sf::Texture;
+	if (!grass_texture->loadFromFile("resources/grass.png"))
+	{
+		// error...
+	}
+	textures.push_back(grass_texture);
+
+	sf::Texture* water_texture = new sf::Texture;
+	if (!water_texture->loadFromFile("resources/water.png"))
+	{
+		// error...
+	}
+	textures.push_back(water_texture);
+
+	sf::Texture* hero_texture = new sf::Texture;
+	if (!hero_texture->loadFromFile("resources/hero.png"))
+	{
+		// error...
+	}
+	textures.push_back(hero_texture);
 	
 	// init camera
 	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
 	camera.clip({0, 0});
 
 
-	// load test entities
-	for (int i = -10; i <= 10; i++)
-		for (int j = -10; j <= 10; j++)
+	// load test tilemap
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 20; j++)
 		{
-			entities.push_back(new aft::core::Entity(100.0f * j, 100.0f * i, 50.0f, 50.0f, cabbage_texture));
+			if (tilemap[i].at(j) == 'm')
+				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
+			else if (tilemap[i].at(j) == 'g')
+				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
+			else if (tilemap[i].at(j) == 'w')
+				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
+			else if (tilemap[i].at(j) == 'c')
+				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
 		}
+
+
+	player = aft::Player(64.0f, 64.0f, hero_texture);
+	player.setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	running = true;
 
@@ -55,7 +119,7 @@ void init()
 	debug_text.setPosition(0, 0);
 }
 
-void get_input(float elapsed_time)
+/*void get_input(float elapsed_time)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
@@ -74,12 +138,13 @@ void get_input(float elapsed_time)
 	{
 		camera.y += CAMERA_SPEED * elapsed_time;
 	}
-}
+}*/
 
-void update_and_render(sf::RenderWindow* window)
+void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
 	for (aft::core::Entity* entity : entities)
 	{
+		//entity->update(elapsed_time);
 		if (camera.captures(*entity))
 		{
 			int offset_x = entity->x - camera.x;
@@ -89,12 +154,26 @@ void update_and_render(sf::RenderWindow* window)
 			int render_x = WIDTH / 2 + offset_x;
 			int render_y = HEIGHT / 2 - offset_y;
 
-			//entity->sprite.setSize(sf::Vector2f(entity->width, entity->height));
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
-			//entity->sprite.setFillColor(sf::Color::Green);
 			window->draw(entity->sprite);
 		}
 	}
+
+	// update and render the player
+	player.update(elapsed_time);
+
+	int offset_x = player.x - camera.x;
+	int offset_y = player.y - camera.y;
+
+	// transfer from game coordinate system to screen coordinate system
+	int render_x = WIDTH / 2 + offset_x;
+	int render_y = HEIGHT / 2 - offset_y;
+
+	player.sprite.setPosition(sf::Vector2f(offset_x, offset_y));
+	window->draw(player.sprite);
+
+	// clip camera to the player
+	camera.clip(player);
 }
 
 void destroy()
@@ -131,17 +210,18 @@ int main()
 		}
 
 		// process player input
-		get_input(elapsed_time);
+		//get_input(elapsed_time);
 
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
 		// draw everything here...
-		update_and_render(&window);
+		update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")";
+		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")\nFPS: "
+			+ std::to_string(1000.0f / elapsed_time);
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
 

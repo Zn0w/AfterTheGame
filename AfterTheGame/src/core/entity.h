@@ -22,6 +22,9 @@ public:
 		sf::Vector2u texture_size = sprite.getTexture()->getSize();
 		sprite.setScale(width / texture_size.x, height / texture_size.y);
 	}
+
+	//virtual void update(float elapsed_time) = 0;
+	virtual void update(float elapsed_time) {}
 };
 
 } }
