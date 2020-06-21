@@ -1,36 +1,24 @@
 #pragma once
 
-#include "../core/entity.h"
+#include "living_entity.h"
 
 
 namespace aft {
-
-#define PLAYER_NORMAL_SPEED 0.8f
 	
-class Player : public core::Entity
+class Player : public LivingEntity
 {
 public:
-	float speed = 0.0f;
+	Player(float s_speed, float s_hp)
+		: LivingEntity(s_speed, s_hp)
+	{}
 
-
-public:
-	Player()
-		: Entity()
-	{
-		speed = PLAYER_NORMAL_SPEED;
-	}
-
-	Player(float w, float h, sf::Texture* texture)
-		: Entity(0.0f, 0.0f, w, h, texture)
-	{
-		speed = PLAYER_NORMAL_SPEED;
-	}
+	Player(float s_speed, float s_hp, float w, float h, sf::Texture* texture)
+		: LivingEntity(s_speed, s_hp, 0.0f, 0.0f, w, h, texture)
+	{}
 	
-	Player(float xpos, float ypos, float w, float h, sf::Texture* texture)
-		: Entity(xpos, ypos, w, h, texture)
-	{
-		speed = PLAYER_NORMAL_SPEED;
-	}
+	Player(float s_speed, float s_hp, float xpos, float ypos, float w, float h, sf::Texture* texture)
+		: LivingEntity(s_speed, s_hp, xpos, ypos, w, h, texture)
+	{}
 	
 	void update(float elapsed_time);
 };

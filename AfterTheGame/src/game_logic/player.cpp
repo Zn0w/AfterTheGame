@@ -7,23 +7,27 @@ namespace aft {
 
 void Player::update(float elapsed_time)
 {
+	velocity = { 0.0f, 0.0f };
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		x -= speed * elapsed_time;
+		velocity.x = -speed * elapsed_time;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		x += speed * elapsed_time;
+		velocity.x = speed * elapsed_time;
 	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		y -= speed * elapsed_time;
+		velocity.y = -speed * elapsed_time;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		y += speed * elapsed_time;
+		velocity.y = speed * elapsed_time;
 	}
+
+	x += velocity.x;
+	y += velocity.y;
 }
 
 }

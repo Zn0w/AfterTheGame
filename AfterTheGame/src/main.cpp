@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 #include <SFML/Graphics.hpp>
 
@@ -11,12 +12,19 @@
 #define WIDTH 1280
 #define HEIGHT 720
 #define CAMERA_SPEED 1.5f
+#define PLAYER_NORMAL_SPEED 0.8f
+#define PLAYER_INIT_HEALTH 100.0f
+#define UPDATE_RADIUS 500.0f
 
 bool running = false;
-aft::core::Camera camera;
-std::vector<aft::core::Entity*> entities;
 std::vector<sf::Texture*> textures;
-aft::Player player;
+
+aft::core::Camera camera;
+std::vector<aft::core::Entity*> tilemap_solid;
+std::vector<aft::core::Entity*> tilemap_nonsolid;
+std::vector<aft::LivingEntity*> npcs;
+std::vector<aft::core::Entity*> interactables;
+aft::Player player(0.0f, 0.0f);
 
 sf::Font font;
 sf::Text debug_text;
@@ -42,6 +50,29 @@ std::string tilemap[20] = {
 	"mmmmmmmmmmmmmmmmmmmm",
 	"mmmmmmmmmmmmmmmmmmmm",
 	"mmmmmmmmmmmmmmmmmmmm"
+};
+
+std::string collision_map[20] = {
+	"11111111111111111111",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10001110000000000001",
+	"10001110000000000001",
+	"10001110000000000001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10000000000000110001",
+	"10000000000000110001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"10000000111111110001",
+	"10000000111111100001",
+	"10000000000000000001",
+	"10000000000000000001",
+	"11111111111111111111"
 };
 
 
@@ -92,18 +123,32 @@ void init()
 	for (int i = 0; i < 20; i++)
 		for (int j = 0; j < 20; j++)
 		{
-			if (tilemap[i].at(j) == 'm')
-				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
-			else if (tilemap[i].at(j) == 'g')
-				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
-			else if (tilemap[i].at(j) == 'w')
-				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
-			else if (tilemap[i].at(j) == 'c')
-				entities.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
+			if (collision_map[i].at(j) == '0')
+			{
+				if (tilemap[i].at(j) == 'm')
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
+				else if (tilemap[i].at(j) == 'g')
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
+				else if (tilemap[i].at(j) == 'w')
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
+				else if (tilemap[i].at(j) == 'c')
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
+			}
+			else
+			{
+				if (tilemap[i].at(j) == 'm')
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
+				else if (tilemap[i].at(j) == 'g')
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
+				else if (tilemap[i].at(j) == 'w')
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
+				else if (tilemap[i].at(j) == 'c')
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
+			}
 		}
 
 
-	player = aft::Player(64.0f, 64.0f, hero_texture);
+	player = aft::Player(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, hero_texture);
 	player.setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	running = true;
@@ -142,9 +187,103 @@ void init()
 
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
-	for (aft::core::Entity* entity : entities)
+	for (aft::core::Entity* entity : tilemap_nonsolid)
 	{
-		//entity->update(elapsed_time);
+		if (camera.captures(*entity))
+		{
+			int offset_x = entity->x - camera.x;
+			int offset_y = entity->y - camera.y;
+
+			// transfer from game coordinate system to screen coordinate system
+			int render_x = WIDTH / 2 + offset_x;
+			int render_y = HEIGHT / 2 - offset_y;
+
+			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
+			window->draw(entity->sprite);
+		}
+	}
+	
+	sf::Vector2f player_origin = player.getOrigin();
+	
+	for (aft::core::Entity* entity : tilemap_solid)
+	{
+		sf::Vector2f entity_origin = entity->getOrigin();
+		sf::Vector2f distance = entity_origin - player_origin;
+		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
+		{
+			float entity_x1 = entity->x;
+			float entity_y1 = entity->y;
+			float entity_x2 = entity->x + entity->width;
+			float entity_y2 = entity->y + entity->height;
+			
+			for (aft::LivingEntity* npc : npcs)
+			{
+				if (entity->collides(*npc))
+				{
+					aft::core::Entity e(npc->x - npc->velocity.x, npc->y, npc->width, npc->height, textures.at(0));
+					if (!entity->collides(e))
+						npc->x -= npc->velocity.x;
+					else
+						npc->y -= npc->velocity.y;
+				}
+			}
+
+			if (entity->collides(player))
+			{
+				aft::core::Entity e(player.x - player.velocity.x, player.y, player.width, player.height, textures.at(0));
+				if (!entity->collides(e))
+					player.x -= player.velocity.x;
+				else
+					player.y -= player.velocity.y;
+			}
+		}
+		
+		if (camera.captures(*entity))
+		{
+			int offset_x = entity->x - camera.x;
+			int offset_y = entity->y - camera.y;
+
+			// transfer from game coordinate system to screen coordinate system
+			int render_x = WIDTH / 2 + offset_x;
+			int render_y = HEIGHT / 2 - offset_y;
+
+			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
+			window->draw(entity->sprite);
+		}
+	}
+
+	for (aft::LivingEntity* entity : npcs)
+	{
+		sf::Vector2f entity_origin = entity->getOrigin();
+		sf::Vector2f distance = entity_origin - player_origin;
+		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
+		{
+			entity->update(elapsed_time);
+		}
+
+		if (camera.captures(*entity))
+		{
+			int offset_x = entity->x - camera.x;
+			int offset_y = entity->y - camera.y;
+
+			// transfer from game coordinate system to screen coordinate system
+			int render_x = WIDTH / 2 + offset_x;
+			int render_y = HEIGHT / 2 - offset_y;
+
+			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
+			window->draw(entity->sprite);
+		}
+	}
+
+	for (aft::core::Entity* entity : interactables)
+	{
+		sf::Vector2f entity_origin = entity->getOrigin();
+		sf::Vector2f distance = entity_origin - player_origin;
+		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
+		{
+			entity->update(elapsed_time);
+		}
+
 		if (camera.captures(*entity))
 		{
 			int offset_x = entity->x - camera.x;
