@@ -3,6 +3,8 @@
 #include "camera.h"
 
 
+namespace aft { namespace core {
+
 bool Camera::captures(Entity& entity)
 {
 	float object_x1 = entity.x;
@@ -35,3 +37,5 @@ void Camera::clip(sf::Vector2f position)
 	x = position.x - width / 2;
 	y = position.y - height / 2;
 }
+
+} }

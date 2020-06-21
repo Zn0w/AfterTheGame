@@ -3,6 +3,8 @@
 #include "entity.h"
 
 
+namespace aft { namespace core {
+
 class Camera : public WorldObject
 {
 public:
@@ -19,3 +21,5 @@ public:
 	
 	void clip(sf::Vector2f entity);
 };
+
+} }

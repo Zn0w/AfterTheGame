@@ -12,8 +12,8 @@
 #define CAMERA_SPEED 1.5f
 
 bool running = false;
-Camera camera;
-std::vector<Entity*> entities;
+aft::core::Camera camera;
+std::vector<aft::core::Entity*> entities;
 std::vector<sf::Texture*> textures;
 
 sf::Font font;
@@ -31,7 +31,7 @@ void init()
 	textures.push_back(cabbage_texture);
 	
 	// init camera
-	camera = Camera(0, 0, WIDTH, HEIGHT);
+	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
 	camera.clip({0, 0});
 
 
@@ -39,7 +39,7 @@ void init()
 	for (int i = -10; i <= 10; i++)
 		for (int j = -10; j <= 10; j++)
 		{
-			entities.push_back(new Entity(100.0f * j, 100.0f * i, 50.0f, 50.0f, cabbage_texture));
+			entities.push_back(new aft::core::Entity(100.0f * j, 100.0f * i, 50.0f, 50.0f, cabbage_texture));
 		}
 
 	running = true;
@@ -78,7 +78,7 @@ void get_input(float elapsed_time)
 
 void update_and_render(sf::RenderWindow* window)
 {
-	for (Entity* entity : entities)
+	for (aft::core::Entity* entity : entities)
 	{
 		if (camera.captures(*entity))
 		{

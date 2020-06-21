@@ -3,6 +3,8 @@
 #include "world_object.h"
 
 
+namespace aft { namespace core {
+
 class Entity : public WorldObject
 {
 public:
@@ -21,3 +23,5 @@ public:
 		sprite.setScale(width / texture_size.x, height / texture_size.y);
 	}
 };
+
+} }

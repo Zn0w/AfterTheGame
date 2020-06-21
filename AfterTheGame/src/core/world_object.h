@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 
+namespace aft { namespace core {
+
 class WorldObject
 {
 public:
@@ -23,3 +25,5 @@ public:
 		return { x + width / 2, y + height / 2 };
 	}
 };
+
+} }
