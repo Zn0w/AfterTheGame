@@ -1,0 +1,25 @@
+testlevel 02
+
+tilemap
+ssssssssssssssssssss
+ssssssssssssssssssss
+ssssssssssssssssssss
+ssssssssssssssssssss
+sssssssssswwwwwwwwss
+sssssssssswwwwwwwwss
+sssssssssswwwwwwwwss
+ssssssssssssssssssss
+
+collision
+11111111111111111111
+10000000000000000001
+10000000000000000001
+10000000000000000001
+10000000000000000001
+10000000000000000001
+10000000000000000001
+11111111111111111111
+
+textures
+s;resources/sand.png
+w;resources/water.png

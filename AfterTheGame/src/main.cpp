@@ -33,52 +33,6 @@ aft::Player player(0.0f, 0.0f);
 sf::Font font;
 sf::Text debug_text;
 
-std::string tilemap[20] = {
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmggggggggggggggggmm",
-	"mmggggggggggggggggmm",
-	"mmggwwwgggggggggggmm",
-	"mmggwwwgggggggggggmm",
-	"mmggwwwgggggggcgggmm",
-	"mmggggggggggggggggmm",
-	"mmggggcgggggggggggmm",
-	"mmggggggggggggwwggmm",
-	"mmggggggggggggwwggmm",
-	"mmggggggggcgggggggmm",
-	"mmggcgggggggggggcgmm",
-	"mmggggggwwwwwwwwggmm",
-	"mmmmmmmmwwwwwwwmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm",
-	"mmmmmmmmmmmmmmmmmmmm"
-};
-
-std::string collision_map[20] = {
-	"11111111111111111111",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10001110000000000001",
-	"10001110000000000001",
-	"10001110000000000001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10000000000000110001",
-	"10000000000000110001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"10000000111111110001",
-	"10000000111111100001",
-	"10000000000000000001",
-	"10000000000000000001",
-	"11111111111111111111"
-};
-
 
 void init()
 {
@@ -108,30 +62,14 @@ void init()
 			if (levels[current_level].collision_map.at(i).at(j) == '0')
 			{
 				tilemap_nonsolid.push_back(
-					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[tilemap[i].at(j)]].location)
+					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[column]].location)
 				);
-				/*if (tilemap[i].at(j) == 'm')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/rock.png"].location));
-				else if (tilemap[i].at(j) == 'g')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/grass.png"].location));
-				else if (tilemap[i].at(j) == 'w')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/water.png"].location));
-				else if (tilemap[i].at(j) == 'c')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/cabbage.png"].location));*/
 			}
 			else
 			{
 				tilemap_solid.push_back(
-					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[tilemap[i].at(j)]].location)
+					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[column]].location)
 				);
-				/*if (tilemap[i].at(j) == 'm')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/rock.png"].location));
-				else if (tilemap[i].at(j) == 'g')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/grass.png"].location));
-				else if (tilemap[i].at(j) == 'w')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/water.png"].location));
-				else if (tilemap[i].at(j) == 'c')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/cabbage.png"].location));*/
 			}
 			j++;
 		}

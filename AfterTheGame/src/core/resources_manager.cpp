@@ -12,7 +12,7 @@ namespace aft { namespace core {
 bool loadTexture(std::string path, std::map<std::string, TextureResource>& textures)
 {
 	sf::Texture* texture = new sf::Texture;
-	if (!texture->loadFromFile("resources/cabbage.png"))
+	if (!texture->loadFromFile(path))
 	{
 		std::cout << "Failed to load texture (" << path << ")" << std::endl;
 		return false;
