@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "core/camera.h"
+#include "core/resources_manager.h"
 #include "game_logic/player.h"
 #include "game_logic/horse.h"
 
@@ -18,7 +19,9 @@
 #define UPDATE_RADIUS 1000.0f
 
 bool running = false;
-std::vector<sf::Texture*> textures;
+std::map<std::string, aft::core::TextureResource> textures;
+std::map<std::string, aft::core::LevelResource> levels;
+std::string current_level;
 
 aft::core::Camera camera;
 std::vector<aft::core::Entity*> tilemap_solid;
@@ -79,41 +82,17 @@ std::string collision_map[20] = {
 
 void init()
 {
-	// load textures
-	sf::Texture* cabbage_texture = new sf::Texture;
-	if (!cabbage_texture->loadFromFile("resources/cabbage.png"))
+	if (!aft::core::loadLevel("resources/testlevel_01.aft_level", textures, levels))
 	{
-		std::cout << "Failed to load the cabbage texture" << std::endl;
+		// respond to couldn't load level resource error
 	}
-	textures.push_back(cabbage_texture);
-
-	sf::Texture* rock_texture = new sf::Texture;
-	if (!rock_texture->loadFromFile("resources/rock.png"))
+	current_level = "resources/testlevel_01.aft_level";
+	
+	// load player texture
+	if (!aft::core::loadTexture("resources/hero.png", textures))
 	{
-		// error...
+		// respond to couldn't load level resource error
 	}
-	textures.push_back(rock_texture);
-
-	sf::Texture* grass_texture = new sf::Texture;
-	if (!grass_texture->loadFromFile("resources/grass.png"))
-	{
-		// error...
-	}
-	textures.push_back(grass_texture);
-
-	sf::Texture* water_texture = new sf::Texture;
-	if (!water_texture->loadFromFile("resources/water.png"))
-	{
-		// error...
-	}
-	textures.push_back(water_texture);
-
-	sf::Texture* hero_texture = new sf::Texture;
-	if (!hero_texture->loadFromFile("resources/hero.png"))
-	{
-		// error...
-	}
-	textures.push_back(hero_texture);
 	
 	// init camera
 	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
@@ -121,40 +100,52 @@ void init()
 
 
 	// load test tilemap
-	for (int i = 0; i < 20; i++)
-		for (int j = 0; j < 20; j++)
+	int i = 0, j = 0;
+	for (std::string row : levels[current_level].tilemap)
+	{
+		for (char column : row)
 		{
-			if (collision_map[i].at(j) == '0')
+			if (levels[current_level].collision_map.at(i).at(j) == '0')
 			{
-				if (tilemap[i].at(j) == 'm')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
+				tilemap_nonsolid.push_back(
+					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[tilemap[i].at(j)]].location)
+				);
+				/*if (tilemap[i].at(j) == 'm')
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/rock.png"].location));
 				else if (tilemap[i].at(j) == 'g')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/grass.png"].location));
 				else if (tilemap[i].at(j) == 'w')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/water.png"].location));
 				else if (tilemap[i].at(j) == 'c')
-					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
+					tilemap_nonsolid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/cabbage.png"].location));*/
 			}
 			else
 			{
-				if (tilemap[i].at(j) == 'm')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, rock_texture));
+				tilemap_solid.push_back(
+					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[tilemap[i].at(j)]].location)
+				);
+				/*if (tilemap[i].at(j) == 'm')
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/rock.png"].location));
 				else if (tilemap[i].at(j) == 'g')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, grass_texture));
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/grass.png"].location));
 				else if (tilemap[i].at(j) == 'w')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, water_texture));
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/water.png"].location));
 				else if (tilemap[i].at(j) == 'c')
-					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, cabbage_texture));
+					tilemap_solid.push_back(new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures["resources/cabbage.png"].location));*/
 			}
+			j++;
 		}
+		i++;
+		j = 0;
+	}
 
 
-	player = aft::Player(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, hero_texture);
+	player = aft::Player(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
 	player.setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	// spawn test npcs
-	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, hero_texture));
-	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, hero_texture));
+	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
 
 	running = true;
 
@@ -204,7 +195,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			{
 				if (entity->collides(*npc))
 				{
-					aft::core::Entity e(npc->x - npc->velocity.x, npc->y, npc->width, npc->height, textures.at(0));
+					aft::core::Entity e(npc->x - npc->velocity.x, npc->y, npc->width, npc->height, textures["resources/hero.png"].location);
 					if (!entity->collides(e))
 						npc->x -= npc->velocity.x;
 					else
@@ -215,7 +206,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			// handle collision with player
 			if (entity->collides(player))
 			{
-				aft::core::Entity e(player.x - player.velocity.x, player.y, player.width, player.height, textures.at(0));
+				aft::core::Entity e(player.x - player.velocity.x, player.y, player.width, player.height, textures["resources/hero.png"].location);
 				if (!entity->collides(e))
 					player.x -= player.velocity.x;
 				else
