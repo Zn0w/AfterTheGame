@@ -15,7 +15,7 @@
 #define CAMERA_SPEED 1.5f
 #define PLAYER_NORMAL_SPEED 0.8f
 #define PLAYER_INIT_HEALTH 100.0f
-#define UPDATE_RADIUS 500.0f
+#define UPDATE_RADIUS 1000.0f
 
 bool running = false;
 std::vector<sf::Texture*> textures;
@@ -83,7 +83,7 @@ void init()
 	sf::Texture* cabbage_texture = new sf::Texture;
 	if (!cabbage_texture->loadFromFile("resources/cabbage.png"))
 	{
-		// error...
+		std::cout << "Failed to load the cabbage texture" << std::endl;
 	}
 	textures.push_back(cabbage_texture);
 
@@ -169,39 +169,15 @@ void init()
 	debug_text.setPosition(0, 0);
 }
 
-/*void get_input(float elapsed_time)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		camera.x -= CAMERA_SPEED * elapsed_time;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		camera.x += CAMERA_SPEED * elapsed_time;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		camera.y -= CAMERA_SPEED * elapsed_time;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		camera.y += CAMERA_SPEED * elapsed_time;
-	}
-}*/
-
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
+	// render non-solid tiles
 	for (aft::core::Entity* entity : tilemap_nonsolid)
 	{
 		if (camera.captures(*entity))
 		{
 			int offset_x = entity->x - camera.x;
 			int offset_y = entity->y - camera.y;
-
-			// transfer from game coordinate system to screen coordinate system
-			int render_x = WIDTH / 2 + offset_x;
-			int render_y = HEIGHT / 2 - offset_y;
 
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
@@ -210,10 +186,12 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	
 	sf::Vector2f player_origin = player.getOrigin();
 	
+	// handle collision of npcs and player with soloid tiles, then render them
 	for (aft::core::Entity* entity : tilemap_solid)
 	{
 		sf::Vector2f entity_origin = entity->getOrigin();
 		sf::Vector2f distance = entity_origin - player_origin;
+		// if the solid tile is within an update radius, then check for collision
 		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
 		{
 			float entity_x1 = entity->x;
@@ -221,6 +199,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			float entity_x2 = entity->x + entity->width;
 			float entity_y2 = entity->y + entity->height;
 			
+			// handle collision with npcs
 			for (aft::LivingEntity* npc : npcs)
 			{
 				if (entity->collides(*npc))
@@ -233,6 +212,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 				}
 			}
 
+			// handle collision with player
 			if (entity->collides(player))
 			{
 				aft::core::Entity e(player.x - player.velocity.x, player.y, player.width, player.height, textures.at(0));
@@ -248,15 +228,12 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			int offset_x = entity->x - camera.x;
 			int offset_y = entity->y - camera.y;
 
-			// transfer from game coordinate system to screen coordinate system
-			int render_x = WIDTH / 2 + offset_x;
-			int render_y = HEIGHT / 2 - offset_y;
-
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
 		}
 	}
 
+	// update npcs that are within an update radius, then render them (if captured by camera)
 	for (aft::LivingEntity* entity : npcs)
 	{
 		sf::Vector2f entity_origin = entity->getOrigin();
@@ -271,15 +248,12 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			int offset_x = entity->x - camera.x;
 			int offset_y = entity->y - camera.y;
 
-			// transfer from game coordinate system to screen coordinate system
-			int render_x = WIDTH / 2 + offset_x;
-			int render_y = HEIGHT / 2 - offset_y;
-
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
 		}
 	}
 
+	// update interactable world objects that are within an update radius, then render them (if captured by camera)
 	for (aft::core::Entity* entity : interactables)
 	{
 		sf::Vector2f entity_origin = entity->getOrigin();
@@ -294,10 +268,6 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			int offset_x = entity->x - camera.x;
 			int offset_y = entity->y - camera.y;
 
-			// transfer from game coordinate system to screen coordinate system
-			int render_x = WIDTH / 2 + offset_x;
-			int render_y = HEIGHT / 2 - offset_y;
-
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
 		}
@@ -308,10 +278,6 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 
 	int offset_x = player.x - camera.x;
 	int offset_y = player.y - camera.y;
-
-	// transfer from game coordinate system to screen coordinate system
-	int render_x = WIDTH / 2 + offset_x;
-	int render_y = HEIGHT / 2 - offset_y;
 
 	player.sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 	window->draw(player.sprite);
@@ -339,7 +305,7 @@ int main()
 	while (running)
 	{
 		float elapsed_time = clock.restart().asSeconds() * 1000.0f;
-		std::cout << "Elapsed time: " << elapsed_time << "ms" << std::endl;
+		//std::cout << "Elapsed time: " << elapsed_time << "ms" << std::endl;
 
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
@@ -353,10 +319,6 @@ int main()
 			}
 		}
 
-		// process player input
-		//get_input(elapsed_time);
-
-
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
@@ -365,7 +327,7 @@ int main()
 		
 		// display debug info
 		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")\nFPS: "
-			+ std::to_string(1000.0f / elapsed_time);
+			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")";
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
 
