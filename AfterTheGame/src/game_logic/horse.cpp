@@ -9,6 +9,8 @@ namespace aft {
 
 	void Horse::update(float elapsed_time)
 	{
+		handle_not_pass_through_solid_tiles();
+		
 		if (elapsed_time_count >= max_elapsed_time)
 		{
 			if (steps == 0)

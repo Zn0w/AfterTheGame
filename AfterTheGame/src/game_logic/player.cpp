@@ -7,6 +7,8 @@ namespace aft {
 
 void Player::update(float elapsed_time)
 {
+	handle_not_pass_through_solid_tiles();
+	
 	velocity = { 0.0f, 0.0f };
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))

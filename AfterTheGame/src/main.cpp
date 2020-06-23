@@ -11,6 +11,7 @@
 
 #include "game_logic/player.h"
 #include "game_logic/horse.h"
+#include "game_logic/medicine_pack.h"
 
 
 #define WIDTH 1280
@@ -18,7 +19,7 @@
 #define CAMERA_SPEED 1.5f
 #define PLAYER_NORMAL_SPEED 0.8f
 #define PLAYER_INIT_HEALTH 100.0f
-#define UPDATE_RADIUS 1000.0f
+//#define UPDATE_RADIUS 1000.0f
 
 bool running = false;
 std::map<std::string, aft::core::TextureResource> textures;
@@ -29,8 +30,8 @@ aft::core::Camera camera;
 std::vector<aft::core::Entity*> tilemap_solid;
 std::vector<aft::core::Entity*> tilemap_nonsolid;
 std::vector<aft::LivingEntity*> npcs;
-std::vector<aft::core::Entity*> interactables;
-aft::Player player(0.0f, 0.0f);
+std::vector<aft::InteractableEntity*> interactables;
+aft::Player* player = 0;
 
 sf::Font font;
 sf::Text debug_text;
@@ -82,12 +83,12 @@ void init()
 	}
 
 
-	player = aft::Player(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
-	player.setOrigin({ WIDTH / 2, HEIGHT / 2 });
+	player = new aft::Player(tilemap_solid, 0.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
+	player->setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	// spawn test npcs
-	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
-	npcs.push_back(new aft::Horse(PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+	npcs.push_back(new aft::Horse(tilemap_solid, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+	npcs.push_back(new aft::Horse(tilemap_solid, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
 
 	running = true;
 
@@ -117,12 +118,12 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 		}
 	}
 	
-	sf::Vector2f player_origin = player.getOrigin();
+	sf::Vector2f player_origin = player->getOrigin();
 	
 	// handle collision of npcs and player with soloid tiles, then render them
 	for (aft::core::Entity* entity : tilemap_solid)
 	{
-		sf::Vector2f entity_origin = entity->getOrigin();
+		/*sf::Vector2f entity_origin = entity->getOrigin();
 		sf::Vector2f distance = entity_origin - player_origin;
 		// if the solid tile is within an update radius, then check for collision
 		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
@@ -153,7 +154,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 					player.y = player.old_y;
 				}
 			}
-		}
+		}*/
 		
 		if (camera.captures(*entity))
 		{
@@ -169,8 +170,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	for (aft::LivingEntity* entity : npcs)
 	{
 		sf::Vector2f entity_origin = entity->getOrigin();
-		sf::Vector2f distance = entity_origin - player_origin;
-		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
+		sf::Vector2f distance_to_player = entity_origin - player_origin;
+		if (fabs(distance_to_player.x) <= entity->update_radius && fabs(distance_to_player.y) <= entity->update_radius)
 		{
 			entity->update(elapsed_time);
 		}
@@ -186,11 +187,11 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	}
 
 	// update interactable world objects that are within an update radius, then render them (if captured by camera)
-	for (aft::core::Entity* entity : interactables)
+	for (aft::InteractableEntity* entity : interactables)
 	{
 		sf::Vector2f entity_origin = entity->getOrigin();
-		sf::Vector2f distance = entity_origin - player_origin;
-		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
+		sf::Vector2f distance_to_player = entity_origin - player_origin;
+		if (fabs(distance_to_player.x) <= entity->update_radius && fabs(distance_to_player.y) <= entity->update_radius)
 		{
 			entity->update(elapsed_time);
 		}
@@ -206,16 +207,16 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	}
 
 	// update and render the player
-	player.update(elapsed_time);
+	player->update(elapsed_time);
 
-	int offset_x = player.x - camera.x;
-	int offset_y = player.y - camera.y;
+	int offset_x = player->x - camera.x;
+	int offset_y = player->y - camera.y;
 
-	player.sprite.setPosition(sf::Vector2f(offset_x, offset_y));
-	window->draw(player.sprite);
+	player->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
+	window->draw(player->sprite);
 
 	// clip camera to the player
-	camera.clip(player);
+	camera.clip(*player);
 }
 
 void destroy()
