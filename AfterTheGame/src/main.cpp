@@ -83,7 +83,7 @@ void init()
 	}
 
 
-	player = new aft::Player(tilemap_solid, 0.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
+	player = new aft::Player(tilemap_solid, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
 	player->setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	// spawn test npcs
