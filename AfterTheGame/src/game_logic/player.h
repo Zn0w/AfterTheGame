@@ -11,6 +11,8 @@ public:
 	float old_x = 0.0f, old_y = 0.0f;
 	float speed = 0.0f;
 	float hp = 0.0f;
+	int med_packs = 0;
+
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 	
 	std::vector<Entity*>& solid_tiles;

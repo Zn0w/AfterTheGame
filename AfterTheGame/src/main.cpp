@@ -52,6 +52,12 @@ void init()
 	{
 		// respond to couldn't load level resource error
 	}
+
+	// load medpack texture
+	if (!aft::core::loadTexture("resources/med_pack.png", textures))
+	{
+		// respond to couldn't load level resource error
+	}
 	
 	// init camera
 	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
@@ -89,6 +95,9 @@ void init()
 	// spawn test npcs
 	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
 	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+
+	// spawn test interatables
+	interactables.push_back(new aft::MedicinePack(*player, 1000.0f, 500.0f, 500.0f, 32.0f, 16.0f, textures["resources/med_pack.png"].location));
 
 	running = true;
 
@@ -260,7 +269,7 @@ int main()
 		
 		// display debug info
 		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")\nFPS: "
-			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")";
+			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\nMed packs: " + std::to_string(player->med_packs);
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
 

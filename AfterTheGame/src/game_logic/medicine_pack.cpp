@@ -9,7 +9,7 @@ namespace aft {
 	{
 		if (collides(player))
 		{
-			// add to player's inventory
+			player.med_packs++;
 		}
 	}
 
