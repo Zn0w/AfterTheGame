@@ -1,24 +1,47 @@
 #pragma once
 
-#include "living_entity.h"
+#include "../core/entity.h"
 
 
 namespace aft {
 	
-class Player : public LivingEntity
+class Player : public core::Entity
 {
 public:
+	float update_radius = 0.0f;
+	float old_x = 0.0f, old_y = 0.0f;
+	float speed = 0.0f;
+	float hp = 0.0f;
+	sf::Vector2f velocity = { 0.0f, 0.0f };
+	
+	std::vector<Entity*>& solid_tiles;
+
+
+public:
 	Player(std::vector<Entity*>& s_solid_tiles, float s_update_radius, float s_speed, float s_hp)
-		: LivingEntity(s_solid_tiles, s_update_radius, s_speed, s_hp)
-	{}
+		: Entity(), solid_tiles(s_solid_tiles)
+	{
+		speed = s_speed;
+		hp = s_hp;
+	}
 
 	Player(std::vector<Entity*>& s_solid_tiles, float s_update_radius, float s_speed, float s_hp, float w, float h, sf::Texture* texture)
-		: LivingEntity(s_solid_tiles, s_update_radius, s_speed, s_hp, 0.0f, 0.0f, w, h, texture)
-	{}
+		: Entity(0.0f, 0.0f, w, h, texture), solid_tiles(s_solid_tiles)
+	{
+		speed = s_speed;
+		hp = s_hp;
+	}
 	
 	Player(std::vector<Entity*>& s_solid_tiles, float s_update_radius, float s_speed, float s_hp, float xpos, float ypos, float w, float h, sf::Texture* texture)
-		: LivingEntity(s_solid_tiles, s_update_radius, s_speed, s_hp, xpos, ypos, w, h, texture)
-	{}
+		: Entity(xpos, ypos, w, h, texture), solid_tiles(s_solid_tiles)
+	{
+		speed = s_speed;
+		hp = s_hp;
+	}
+
+	void move(float elapsed_time);
+
+	void handle_not_pass_through_solid_tiles();
 	
 	void update(float elapsed_time);
 };

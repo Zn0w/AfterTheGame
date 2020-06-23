@@ -87,8 +87,8 @@ void init()
 	player->setOrigin({ WIDTH / 2, HEIGHT / 2 });
 
 	// spawn test npcs
-	npcs.push_back(new aft::Horse(tilemap_solid, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
-	npcs.push_back(new aft::Horse(tilemap_solid, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
+	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
 
 	running = true;
 
