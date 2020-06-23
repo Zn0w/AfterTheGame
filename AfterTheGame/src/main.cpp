@@ -7,6 +7,8 @@
 
 #include "core/camera.h"
 #include "core/resources_manager.h"
+#include "core/random_generator.h"
+
 #include "game_logic/player.h"
 #include "game_logic/horse.h"
 
@@ -36,6 +38,8 @@ sf::Text debug_text;
 
 void init()
 {
+	aft::core::init_random_generator();
+	
 	if (!aft::core::loadLevel("resources/testlevel_01.aft_level", textures, levels))
 	{
 		// respond to couldn't load level resource error
@@ -123,32 +127,31 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 		// if the solid tile is within an update radius, then check for collision
 		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
 		{
-			float entity_x1 = entity->x;
-			float entity_y1 = entity->y;
-			float entity_x2 = entity->x + entity->width;
-			float entity_y2 = entity->y + entity->height;
-			
 			// handle collision with npcs
 			for (aft::LivingEntity* npc : npcs)
 			{
 				if (entity->collides(*npc))
 				{
-					aft::core::Entity e(npc->x - npc->velocity.x, npc->y, npc->width, npc->height, textures["resources/hero.png"].location);
-					if (!entity->collides(e))
-						npc->x -= npc->velocity.x;
-					else
-						npc->y -= npc->velocity.y;
+					float present_x = npc->x;
+					npc->x = npc->old_x;
+					if (entity->collides(*npc))
+					{
+						npc->x = present_x;
+						npc->y = npc->old_y;
+					}
 				}
 			}
 
 			// handle collision with player
 			if (entity->collides(player))
 			{
-				aft::core::Entity e(player.x - player.velocity.x, player.y, player.width, player.height, textures["resources/hero.png"].location);
-				if (!entity->collides(e))
-					player.x -= player.velocity.x;
-				else
-					player.y -= player.velocity.y;
+				float present_x = player.x;
+				player.x = player.old_x;
+				if (entity->collides(player))
+				{
+					player.x = present_x;
+					player.y = player.old_y;
+				}
 			}
 		}
 		

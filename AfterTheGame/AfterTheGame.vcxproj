@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\camera.cpp" />
+    <ClCompile Include="src\core\random_generator.cpp" />
     <ClCompile Include="src\core\resources_manager.cpp" />
     <ClCompile Include="src\game_logic\horse.cpp" />
     <ClCompile Include="src\game_logic\player.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="src\core\camera.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\maths.h" />
+    <ClInclude Include="src\core\random_generator.h" />
     <ClInclude Include="src\core\resources_manager.h" />
     <ClInclude Include="src\core\world_object.h" />
     <ClInclude Include="src\game_logic\horse.h" />

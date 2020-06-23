@@ -7,6 +7,13 @@ namespace aft {
 
 	class Horse : public LivingEntity
 	{
+	private:
+		int steps = 0;
+		int max_steps = 5;
+		float max_elapsed_time = 2000.0f;
+		float elapsed_time_count = 0.0f;
+
+	
 	public:
 		Horse(float s_speed, float s_hp)
 			: LivingEntity(s_speed, s_hp)

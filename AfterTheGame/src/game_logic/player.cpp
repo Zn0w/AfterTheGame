@@ -11,23 +11,22 @@ void Player::update(float elapsed_time)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		velocity.x = -speed * elapsed_time;
+		velocity.x = -speed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		velocity.x = speed * elapsed_time;
+		velocity.x = speed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		velocity.y = -speed * elapsed_time;
+		velocity.y = -speed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		velocity.y = speed * elapsed_time;
+		velocity.y = speed;
 	}
 
-	x += velocity.x;
-	y += velocity.y;
+	move(elapsed_time);
 }
 
 }

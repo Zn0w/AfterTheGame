@@ -8,6 +8,7 @@ namespace aft {
 	class LivingEntity : public core::Entity
 	{
 	public:
+		float old_x = 0.0f, old_y = 0.0f;
 		float speed = 0.0f;
 		float hp = 0.0f;
 		sf::Vector2f velocity = { 0.0f, 0.0f };
@@ -33,6 +34,15 @@ namespace aft {
 		{
 			speed = s_speed;
 			hp = s_hp;
+		}
+
+		void move(float elapsed_time)
+		{
+			old_x = x;
+			old_y = y;
+
+			x += velocity.x * elapsed_time;
+			y += velocity.y * elapsed_time;
 		}
 
 		virtual void update(float elapsed_time) {}
