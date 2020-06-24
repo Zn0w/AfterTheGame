@@ -21,6 +21,16 @@ void spawn_entity(
 	switch (entity_id)
 	{
 	case 1: {
+		// if this texture wasn't previously loaded
+		if (textures.find("resources/hero.png") == textures.end())
+		{
+
+			if (!loadTexture("resources/hero.png", textures))
+			{
+				std::cout << "Failed to load texture (resources/hero.png)" << std::endl;
+			}
+		}
+		
 		*player = new Player(
 			tilemap_solid,
 			global_data.player_normal_speed, global_data.player_init_health,
@@ -30,6 +40,16 @@ void spawn_entity(
 	} break;
 	
 	case 2: {
+		// if this texture wasn't previously loaded
+		if (textures.find("resources/hero.png") == textures.end())
+		{
+
+			if (!loadTexture("resources/hero.png", textures))
+			{
+				std::cout << "Failed to load texture (resources/hero.png)" << std::endl;
+			}
+		}
+		
 		Horse* horse = new Horse(
 			tilemap_solid, **player,
 			global_data.horse_update_radius, global_data.player_normal_speed, global_data.player_init_health,
@@ -40,6 +60,16 @@ void spawn_entity(
 	} break;
 
 	case 3: {
+		// if this texture wasn't previously loaded
+		if (textures.find("resources/med_pack.png") == textures.end())
+		{
+
+			if (!loadTexture("resources/med_pack.png", textures))
+			{
+				std::cout << "Failed to load texture (resources/med_pack.png)" << std::endl;
+			}
+		}
+		
 		MedicinePack* med_pack = new MedicinePack(
 			**player,
 			global_data.medpack_update_radius,

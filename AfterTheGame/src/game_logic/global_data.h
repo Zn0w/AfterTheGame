@@ -1,7 +1,7 @@
 #pragma once
 
 
-// game ocnstants
+// game constants
 struct GlobalData
 {
 	float tile_size = 64.0f;

@@ -51,18 +51,6 @@ void init()
 	}
 	current_level = "resources/testlevel_01.aft_level";
 	
-	// load player texture
-	if (!aft::core::loadTexture("resources/hero.png", textures))
-	{
-		// respond to couldn't load level resource error
-	}
-
-	// load medpack texture
-	if (!aft::core::loadTexture("resources/med_pack.png", textures))
-	{
-		// respond to couldn't load level resource error
-	}
-	
 	// init camera
 	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
 	camera.clip({0, 0});
