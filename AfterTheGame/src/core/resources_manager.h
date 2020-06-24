@@ -16,6 +16,13 @@ public:
 	sf::Texture* location = 0;
 };
 
+class SpawnData
+{
+public:
+	unsigned int id;
+	sf::Vector2i position;
+};
+
 class LevelResource
 {
 public:
@@ -23,6 +30,7 @@ public:
 	std::vector<std::string> tilemap;
 	std::vector<std::string> collision_map;
 	std::map<char, std::string> textures_dictionary;
+	std::vector<SpawnData> spawns;
 };
 	
 bool loadLevel(std::string path, std::map<std::string, TextureResource>& textures, std::map<std::string, LevelResource>& levels);

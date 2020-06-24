@@ -49,19 +49,35 @@ bool loadLevel(std::string path, std::map<std::string, TextureResource>& texture
 				level.tilemap.push_back(data);
 		}
 
-		while (getline(level_file, data) && data != "textures")
+		while (getline(level_file, data) && data != "spawns")
 		{
 			if (data != "")
 				level.collision_map.push_back(data);
 		}
 
+		while (getline(level_file, data) && data != "textures")
+		{
+			if (data != "")
+			{
+				std::istringstream words(data);
+				std::string x, y, spawn_id;
+				getline(words, x, ';');
+				getline(words, y, ';');
+				getline(words, spawn_id, ';');
+				level.spawns.push_back({ std::stoul(spawn_id), sf::Vector2i(std::stoi(x), std::stoi(y)) });
+			}
+		}
+
 		while (getline(level_file, data))
 		{
-			std::istringstream words(data);
-			std::string key, texture;
-			getline(words, key, ';');
-			getline(words, texture, ';');
-			level.textures_dictionary.insert(std::pair<char, std::string>(key.at(0), texture));
+			if (data != "")
+			{
+				std::istringstream words(data);
+				std::string key, texture;
+				getline(words, key, ';');
+				getline(words, texture, ';');
+				level.textures_dictionary.insert(std::pair<char, std::string>(key.at(0), texture));
+			}
 		}
 		
 		level_file.close();

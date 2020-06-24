@@ -45,6 +45,13 @@ collision
 10000000000000000001
 11111111111111111111
 
+spawns
+9;9;1
+5;4;2
+15;3;2
+11;9;3
+
+
 textures
 m;resources/rock.png
 g;resources/grass.png

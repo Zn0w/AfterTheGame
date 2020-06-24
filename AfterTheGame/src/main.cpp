@@ -9,16 +9,20 @@
 #include "core/resources_manager.h"
 #include "core/random_generator.h"
 
+#include "game_logic/global_data.h"
+#include "game_logic/spawner.h"
+
 #include "game_logic/player.h"
 #include "game_logic/horse.h"
 #include "game_logic/medicine_pack.h"
 
 
+GlobalData global_data;
 #define WIDTH 1280
 #define HEIGHT 720
 #define CAMERA_SPEED 1.5f
-#define PLAYER_NORMAL_SPEED 0.8f
-#define PLAYER_INIT_HEALTH 100.0f
+//#define PLAYER_NORMAL_SPEED 0.8f
+//#define PLAYER_INIT_HEALTH 100.0f
 //#define UPDATE_RADIUS 1000.0f
 
 bool running = false;
@@ -89,15 +93,11 @@ void init()
 	}
 
 
-	player = new aft::Player(tilemap_solid, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 64.0f, 64.0f, textures["resources/hero.png"].location);
-	player->setOrigin({ WIDTH / 2, HEIGHT / 2 });
-
-	// spawn test npcs
-	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 100.0f, 100.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
-	npcs.push_back(new aft::Horse(tilemap_solid, *player, 1000.0f, PLAYER_NORMAL_SPEED, PLAYER_INIT_HEALTH, 250.0f, 300.0f, 64.0f, 64.0f, textures["resources/hero.png"].location));
-
-	// spawn test interatables
-	interactables.push_back(new aft::MedicinePack(*player, 1000.0f, 500.0f, 500.0f, 32.0f, 16.0f, textures["resources/med_pack.png"].location));
+	// spawn player and other entities
+	for (aft::core::SpawnData spawn_data : levels[current_level].spawns)
+	{
+		aft::spawn_entity(&player, npcs, interactables, spawn_data.id, spawn_data.position, tilemap_solid, textures, global_data);
+	}
 
 	running = true;
 
@@ -129,42 +129,9 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	
 	sf::Vector2f player_origin = player->getOrigin();
 	
-	// handle collision of npcs and player with soloid tiles, then render them
+	// render solid tiles
 	for (aft::core::Entity* entity : tilemap_solid)
 	{
-		/*sf::Vector2f entity_origin = entity->getOrigin();
-		sf::Vector2f distance = entity_origin - player_origin;
-		// if the solid tile is within an update radius, then check for collision
-		if (fabs(distance.x) <= UPDATE_RADIUS && fabs(distance.y) <= UPDATE_RADIUS)
-		{
-			// handle collision with npcs
-			for (aft::LivingEntity* npc : npcs)
-			{
-				if (entity->collides(*npc))
-				{
-					float present_x = npc->x;
-					npc->x = npc->old_x;
-					if (entity->collides(*npc))
-					{
-						npc->x = present_x;
-						npc->y = npc->old_y;
-					}
-				}
-			}
-
-			// handle collision with player
-			if (entity->collides(player))
-			{
-				float present_x = player.x;
-				player.x = player.old_x;
-				if (entity->collides(player))
-				{
-					player.x = present_x;
-					player.y = player.old_y;
-				}
-			}
-		}*/
-		
 		if (camera.captures(*entity))
 		{
 			int offset_x = entity->x - camera.x;
