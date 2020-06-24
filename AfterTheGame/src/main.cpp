@@ -45,11 +45,11 @@ void init()
 {
 	aft::core::init_random_generator();
 	
-	if (!aft::core::loadLevel("resources/testlevel_01.aft_level", textures, levels))
+	if (!aft::core::loadLevel("resources/intro_level_01.aft_level", textures, levels))
 	{
 		// respond to couldn't load level resource error
 	}
-	current_level = "resources/testlevel_01.aft_level";
+	current_level = "resources/intro_level_01.aft_level";
 	
 	// init camera
 	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);

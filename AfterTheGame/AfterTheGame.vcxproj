@@ -154,6 +154,7 @@
     <ClInclude Include="src\game_logic\player.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\intro_level_01.aft_level" />
     <None Include="resources\testlevel_02.aft_level" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
