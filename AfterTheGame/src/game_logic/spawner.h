@@ -41,12 +41,12 @@ void spawn_entity(
 	
 	case 2: {
 		// if this texture wasn't previously loaded
-		if (textures.find("resources/hero.png") == textures.end())
+		if (textures.find("resources/horse.png") == textures.end())
 		{
 
-			if (!loadTexture("resources/hero.png", textures))
+			if (!loadTexture("resources/horse.png", textures))
 			{
-				std::cout << "Failed to load texture (resources/hero.png)" << std::endl;
+				std::cout << "Failed to load texture (resources/horse.png)" << std::endl;
 			}
 		}
 		
@@ -54,8 +54,8 @@ void spawn_entity(
 			tilemap_solid, **player,
 			global_data.horse_update_radius, global_data.player_normal_speed, global_data.player_init_health,
 			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size, global_data.tile_size,
-			textures["resources/hero.png"].location);
+			global_data.tile_size, global_data.tile_size * 3.0f / 4.0f,
+			textures["resources/horse.png"].location);
 		npcs.push_back(horse);
 	} break;
 
