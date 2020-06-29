@@ -43,7 +43,7 @@ public:
 			);
 	}
 
-	//virtual void update(float elapsed_time) = 0;
+	virtual void init() {}
 	virtual void update(float elapsed_time) {}
 };
 

@@ -44,6 +44,8 @@ public:
 
 	void handle_not_pass_through_solid_tiles();
 	
+	void init();
+	
 	void update(float elapsed_time);
 };
 

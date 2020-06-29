@@ -22,12 +22,12 @@ void spawn_entity(
 	{
 	case 1: {
 		// if this texture wasn't previously loaded
-		if (textures.find("resources/hero.png") == textures.end())
+		if (textures.find("resources/guy.png") == textures.end())
 		{
 
-			if (!loadTexture("resources/hero.png", textures))
+			if (!loadTexture("resources/guy.png", textures))
 			{
-				std::cout << "Failed to load texture (resources/hero.png)" << std::endl;
+				std::cout << "Failed to load texture (resources/guy.png)" << std::endl;
 			}
 		}
 		
@@ -35,8 +35,10 @@ void spawn_entity(
 			tilemap_solid,
 			global_data.player_normal_speed, global_data.player_init_health,
 			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size, global_data.tile_size,
-			textures["resources/hero.png"].location);
+			global_data.tile_size * 1.0f, global_data.tile_size  * 2.0f,
+			textures["resources/guy.png"].location);
+
+		(*player)->init();
 	} break;
 	
 	case 2: {
