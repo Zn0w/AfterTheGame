@@ -18,12 +18,6 @@
 
 
 GlobalData global_data;
-#define WIDTH 1280
-#define HEIGHT 720
-#define CAMERA_SPEED 1.5f
-//#define PLAYER_NORMAL_SPEED 0.8f
-//#define PLAYER_INIT_HEALTH 100.0f
-//#define UPDATE_RADIUS 1000.0f
 
 bool running = false;
 std::map<std::string, aft::core::TextureResource> textures;
@@ -52,7 +46,7 @@ void init()
 	current_level = "resources/intro_level_01.aft_level";
 	
 	// init camera
-	camera = aft::core::Camera(0, 0, WIDTH, HEIGHT);
+	camera = aft::core::Camera(0, 0, global_data.screen_width, global_data.screen_height);
 	camera.clip({0, 0});
 
 
@@ -194,7 +188,7 @@ int main()
 	init();
 	
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "After");
+	sf::RenderWindow window(sf::VideoMode(global_data.screen_width, global_data.screen_height), "After");
 
 	sf::Clock clock;
 
