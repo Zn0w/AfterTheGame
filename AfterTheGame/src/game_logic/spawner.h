@@ -35,7 +35,7 @@ void spawn_entity(
 			tilemap_solid,
 			global_data.player_normal_speed, global_data.player_init_health,
 			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size * 1.0f, global_data.tile_size  * 2.0f,
+			global_data.tile_size, global_data.tile_size,
 			textures["resources/guy.png"].location);
 
 		(*player)->init();

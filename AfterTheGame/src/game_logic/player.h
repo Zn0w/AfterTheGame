@@ -2,6 +2,8 @@
 
 #include "../core/entity.h"
 
+#include "../core/animation.h"
+
 
 namespace aft {
 	
@@ -17,24 +19,26 @@ public:
 	
 	std::vector<Entity*>& solid_tiles;
 
+	core::Animation player_animation;
+
 
 public:
 	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp)
-		: Entity(), solid_tiles(s_solid_tiles)
+		: Entity(), solid_tiles(s_solid_tiles), player_animation(sf::Sprite(), { 0,0 }, {0,0})
 	{
 		speed = s_speed;
 		hp = s_hp;
 	}
 
 	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp, float w, float h, sf::Texture* texture)
-		: Entity(0.0f, 0.0f, w, h, texture), solid_tiles(s_solid_tiles)
+		: Entity(0.0f, 0.0f, w, h, texture), solid_tiles(s_solid_tiles), player_animation(sprite, { 32, 64 }, { 64, 128 })
 	{
 		speed = s_speed;
 		hp = s_hp;
 	}
 	
 	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp, float xpos, float ypos, float w, float h, sf::Texture* texture)
-		: Entity(xpos, ypos, w, h, texture), solid_tiles(s_solid_tiles)
+		: Entity(xpos, ypos, w, h, texture), solid_tiles(s_solid_tiles), player_animation(sprite, { 32, 64 }, { 64, 128 })
 	{
 		speed = s_speed;
 		hp = s_hp;
