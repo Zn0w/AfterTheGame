@@ -46,7 +46,7 @@ void init()
 	current_level = "resources/intro_level_01.aft_level";
 	
 	// init camera
-	camera = aft::core::Camera(0, 0, global_data.screen_width, global_data.screen_height);
+	camera = aft::core::Camera(aft::core::Rect(0.0f, 0.0f, global_data.screen_width, global_data.screen_height));
 	camera.clip({0, 0});
 
 
@@ -59,13 +59,17 @@ void init()
 			if (levels[current_level].collision_map.at(i).at(j) == '0')
 			{
 				tilemap_nonsolid.push_back(
-					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[column]].location)
+					new aft::core::Entity(aft::core::Rect(j * global_data.tile_size, i * global_data.tile_size,
+						global_data.tile_size, global_data.tile_size),
+						textures[levels[current_level].textures_dictionary[column]].location)
 				);
 			}
 			else
 			{
 				tilemap_solid.push_back(
-					new aft::core::Entity(j * 64.0f, i * 64.0f, 64.0f, 64.0f, textures[levels[current_level].textures_dictionary[column]].location)
+					new aft::core::Entity(aft::core::Rect(j * global_data.tile_size, i * global_data.tile_size,
+						global_data.tile_size, global_data.tile_size),
+						textures[levels[current_level].textures_dictionary[column]].location)
 				);
 			}
 			j++;
@@ -101,8 +105,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	{
 		if (camera.captures(*entity))
 		{
-			int offset_x = entity->x - camera.x;
-			int offset_y = entity->y - camera.y;
+			int offset_x = entity->rect.x - camera.rect.x;
+			int offset_y = entity->rect.y - camera.rect.y;
 
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
@@ -116,8 +120,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	{
 		if (camera.captures(*entity))
 		{
-			int offset_x = entity->x - camera.x;
-			int offset_y = entity->y - camera.y;
+			int offset_x = entity->rect.x - camera.rect.x;
+			int offset_y = entity->rect.y - camera.rect.y;
 
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
@@ -136,8 +140,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 
 		if (camera.captures(*entity))
 		{
-			int offset_x = entity->x - camera.x;
-			int offset_y = entity->y - camera.y;
+			int offset_x = entity->rect.x - camera.rect.x;
+			int offset_y = entity->rect.y - camera.rect.y;
 
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
@@ -156,8 +160,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 
 		if (camera.captures(*entity))
 		{
-			int offset_x = entity->x - camera.x;
-			int offset_y = entity->y - camera.y;
+			int offset_x = entity->rect.x - camera.rect.x;
+			int offset_y = entity->rect.y - camera.rect.y;
 
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
@@ -167,8 +171,8 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	// update and render the player
 	player->update(elapsed_time);
 
-	int offset_x = player->x - camera.x;
-	int offset_y = player->y - camera.y;
+	int offset_x = player->rect.x - camera.rect.x;
+	int offset_y = player->rect.y - camera.rect.y;
 
 	player->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 	window->draw(player->sprite);
@@ -217,7 +221,7 @@ int main()
 		update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = "Camera (" + std::to_string(camera.x) + ", " + std::to_string(camera.y) + ")\nFPS: "
+		std::string debug_string = "Camera (" + std::to_string(camera.rect.x) + ", " + std::to_string(camera.rect.y) + ")\nFPS: "
 			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\nMed packs: " + std::to_string(player->med_packs);
 		debug_text.setString(debug_string);
 		window.draw(debug_text);

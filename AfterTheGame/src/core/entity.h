@@ -9,31 +9,29 @@ class Entity : public WorldObject
 {
 public:
 	sf::Sprite sprite;
+	sf::Vector2f sprite_rel_position;	// position of sprite relative to the entity x and y
 
 
 public:
-	Entity() : WorldObject()
-	{}
-
-	Entity(float xpos, float ypos, float w, float h, sf::Texture* texture)
-		: WorldObject(xpos, ypos, w, h)
+	Entity(Rect s_rect, sf::Texture* texture)
+		: WorldObject(s_rect)
 	{
 		sprite.setTexture(*texture);
 		sf::Vector2u texture_size = sprite.getTexture()->getSize();
-		sprite.setScale(width / texture_size.x, height / texture_size.y);
+		sprite.setScale(rect.width / texture_size.x, rect.height / texture_size.y);
 	}
 
 	bool collides(Entity& entity)
 	{
-		float e1_x1 = entity.x;
-		float e1_y1 = entity.y;
-		float e1_x2 = entity.x + entity.width;
-		float e1_y2 = entity.y + entity.height;
+		float e1_x1 = entity.rect.x;
+		float e1_y1 = entity.rect.y;
+		float e1_x2 = entity.rect.x + entity.rect.width;
+		float e1_y2 = entity.rect.y + entity.rect.height;
 
-		float e2_x1 = x;
-		float e2_y1 = y;
-		float e2_x2 = x + width;
-		float e2_y2 = y + height;
+		float e2_x1 = rect.x;
+		float e2_y1 = rect.y;
+		float e2_x2 = rect.x + rect.width;
+		float e2_y2 = rect.y + rect.height;
 
 		return (
 			e1_x1 <= e2_x2 &&

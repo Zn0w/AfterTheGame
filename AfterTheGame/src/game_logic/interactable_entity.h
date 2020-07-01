@@ -15,20 +15,8 @@ namespace aft {
 		
 
 	public:
-		InteractableEntity(Player& s_player, float s_update_radius)
-			: Entity(), player(s_player)
-		{
-			update_radius = s_update_radius;
-		}
-
-		InteractableEntity(Player& s_player, float s_update_radius, float w, float h, sf::Texture* texture)
-			: Entity(0.0f, 0.0f, w, h, texture), player(s_player)
-		{
-			update_radius = s_update_radius;
-		}
-
-		InteractableEntity(Player& s_player, float s_update_radius, float xpos, float ypos, float w, float h, sf::Texture* texture)
-			: Entity(xpos, ypos, w, h, texture), player(s_player)
+		InteractableEntity(Player& s_player, float s_update_radius, core::Rect s_rect, sf::Texture* texture)
+			: Entity(s_rect, texture), player(s_player)
 		{
 			update_radius = s_update_radius;
 		}

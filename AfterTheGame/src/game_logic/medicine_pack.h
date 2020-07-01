@@ -15,16 +15,8 @@ namespace aft {
 
 
 	public:
-		MedicinePack(Player& s_player, float s_update_radius)
-			: InteractableEntity(s_player, s_update_radius)
-		{}
-
-		MedicinePack(Player& s_player, float s_update_radius, float w, float h, sf::Texture* texture)
-			: InteractableEntity(s_player, s_update_radius, w, h, texture)
-		{}
-
-		MedicinePack(Player& s_player, float s_update_radius, float xpos, float ypos, float w, float h, sf::Texture* texture)
-			: InteractableEntity(s_player, s_update_radius, xpos, ypos, w, h, texture)
+		MedicinePack(Player& s_player, float s_update_radius, core::Rect s_rect, sf::Texture* texture)
+			: InteractableEntity(s_player, s_update_radius, s_rect, texture)
 		{}
 
 		void update(float elapsed_time);

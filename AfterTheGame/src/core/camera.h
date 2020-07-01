@@ -8,11 +8,12 @@ namespace aft { namespace core {
 class Camera : public WorldObject
 {
 public:
-	Camera() : WorldObject()
+	Camera()
+		: WorldObject(Rect(0.0f, 0.0f, 0.0f, 0.f))
 	{}
-
-	Camera(float xpos, float ypos, float w, float h)
-		: WorldObject(xpos, ypos, w, h)
+	
+	Camera(Rect s_rect)
+		: WorldObject(s_rect)
 	{}
 
 	bool captures(Entity& entity);

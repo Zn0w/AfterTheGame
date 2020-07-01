@@ -34,8 +34,8 @@ void spawn_entity(
 		*player = new Player(
 			tilemap_solid,
 			global_data.player_normal_speed, global_data.player_init_health,
-			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size, global_data.tile_size,
+			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
+			global_data.tile_size, global_data.tile_size),
 			textures["resources/guy.png"].location);
 
 		(*player)->init();
@@ -55,8 +55,8 @@ void spawn_entity(
 		Horse* horse = new Horse(
 			tilemap_solid, **player,
 			global_data.horse_update_radius, global_data.player_normal_speed, global_data.player_init_health,
-			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size, global_data.tile_size * 3.0f / 4.0f,
+			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
+			global_data.tile_size, global_data.tile_size * 3.0f / 4.0f),
 			textures["resources/horse.png"].location);
 		npcs.push_back(horse);
 	} break;
@@ -75,8 +75,8 @@ void spawn_entity(
 		MedicinePack* med_pack = new MedicinePack(
 			**player,
 			global_data.medpack_update_radius,
-			position.x * global_data.tile_size, position.y * global_data.tile_size,
-			global_data.tile_size / 2.0f, global_data.tile_size / 4.0f,
+			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
+			global_data.tile_size / 2.0f, global_data.tile_size / 4.0f),
 			textures["resources/med_pack.png"].location);
 		interactables.push_back(med_pack);
 	} break;

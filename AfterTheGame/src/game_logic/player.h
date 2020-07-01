@@ -23,22 +23,8 @@ public:
 
 
 public:
-	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp)
-		: Entity(), solid_tiles(s_solid_tiles), player_animation(sf::Sprite(), { 0,0 }, {0,0})
-	{
-		speed = s_speed;
-		hp = s_hp;
-	}
-
-	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp, float w, float h, sf::Texture* texture)
-		: Entity(0.0f, 0.0f, w, h, texture), solid_tiles(s_solid_tiles), player_animation(sprite, { 32, 64 }, { 64, 128 })
-	{
-		speed = s_speed;
-		hp = s_hp;
-	}
-	
-	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp, float xpos, float ypos, float w, float h, sf::Texture* texture)
-		: Entity(xpos, ypos, w, h, texture), solid_tiles(s_solid_tiles), player_animation(sprite, { 32, 64 }, { 64, 128 })
+	Player(std::vector<Entity*>& s_solid_tiles, float s_speed, float s_hp, core::Rect s_rect, sf::Texture* texture)
+		: Entity(s_rect, texture), solid_tiles(s_solid_tiles), player_animation(sprite, { 32, 64 }, { 64, 128 })
 	{
 		speed = s_speed;
 		hp = s_hp;

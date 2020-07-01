@@ -12,12 +12,12 @@ void Player::handle_not_pass_through_solid_tiles()
 	{
 		if (collides(*solid_tile))
 		{
-			float present_x = x;
-			x = old_x;
+			float present_x = rect.x;
+			rect.x = old_x;
 			if (collides(*solid_tile))
 			{
-				x = present_x;
-				y = old_y;
+				rect.x = present_x;
+				rect.y = old_y;
 			}
 		}
 	}
@@ -25,11 +25,11 @@ void Player::handle_not_pass_through_solid_tiles()
 	
 void Player::move(float elapsed_time)
 {
-	old_x = x;
-	old_y = y;
+	old_x = rect.x;
+	old_y = rect.y;
 
-	x += velocity.x * elapsed_time;
-	y += velocity.y * elapsed_time;
+	rect.x += velocity.x * elapsed_time;
+	rect.y += velocity.y * elapsed_time;
 }
 
 void Player::init()

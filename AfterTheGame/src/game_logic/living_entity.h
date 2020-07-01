@@ -17,22 +17,8 @@ namespace aft {
 
 		
 	public:
-		LivingEntity(std::vector<Entity*>& s_solid_tiles, Player& s_player, float s_update_radius, float s_speed, float s_hp)
-			: InteractableEntity(s_player, s_update_radius), solid_tiles(s_solid_tiles)
-		{
-			speed = s_speed;
-			hp = s_hp;
-		}
-
-		LivingEntity(std::vector<Entity*>& s_solid_tiles, Player& s_player, float s_update_radius, float s_speed, float s_hp, float w, float h, sf::Texture* texture)
-			: InteractableEntity(s_player, s_update_radius, 0.0f, 0.0f, w, h, texture), solid_tiles(s_solid_tiles)
-		{
-			speed = s_speed;
-			hp = s_hp;
-		}
-
-		LivingEntity(std::vector<Entity*>& s_solid_tiles, Player& s_player, float s_update_radius, float s_speed, float s_hp, float xpos, float ypos, float w, float h, sf::Texture* texture)
-			: InteractableEntity(s_player, s_update_radius, xpos, ypos, w, h, texture), solid_tiles(s_solid_tiles)
+		LivingEntity(std::vector<Entity*>& s_solid_tiles, Player& s_player, float s_update_radius, float s_speed, float s_hp, core::Rect s_rect, sf::Texture* texture)
+			: InteractableEntity(s_player, s_update_radius, s_rect, texture), solid_tiles(s_solid_tiles)
 		{
 			speed = s_speed;
 			hp = s_hp;
@@ -40,11 +26,11 @@ namespace aft {
 
 		void move(float elapsed_time)
 		{
-			old_x = x;
-			old_y = y;
+			old_x = rect.x;
+			old_y = rect.y;
 
-			x += velocity.x * elapsed_time;
-			y += velocity.y * elapsed_time;
+			rect.x += velocity.x * elapsed_time;
+			rect.y += velocity.y * elapsed_time;
 		}
 
 		void handle_not_pass_through_solid_tiles()
@@ -54,12 +40,12 @@ namespace aft {
 			{
 				if (collides(*solid_tile))
 				{
-					float present_x = x;
-					x = old_x;
+					float present_x = rect.x;
+					rect.x = old_x;
 					if (collides(*solid_tile))
 					{
-						x = present_x;
-						y = old_y;
+						rect.x = present_x;
+						rect.y = old_y;
 					}
 				}
 			}
