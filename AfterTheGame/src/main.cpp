@@ -231,7 +231,14 @@ int main()
 		
 		// display debug info
 		std::string debug_string = "Camera (" + std::to_string(camera.rect.x) + ", " + std::to_string(camera.rect.y) + ")\nFPS: "
-			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\nMed packs: " + std::to_string(player->med_packs);
+			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\ninventory: \n";
+
+		// list the player's inventory items in debug string
+		for (auto const& i : player->inventory)
+		{
+			debug_string += std::to_string(i.first) + ": " + std::to_string(i.second) + "\n";
+		}
+
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
 

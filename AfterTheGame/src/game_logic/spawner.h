@@ -6,9 +6,10 @@
 
 #include "living_entity.h"
 #include "global_data.h"
-#include "game_logic/player.h"
-#include "game_logic/horse.h"
-#include "game_logic/medicine_pack.h"
+#include "player.h"
+#include "horse.h"
+#include "medicine_pack.h"
+#include "dropped_item.h"
 
 
 namespace aft {
@@ -72,7 +73,8 @@ void spawn_entity(
 			}
 		}
 		
-		MedicinePack* med_pack = new MedicinePack(
+		DroppedItem* med_pack = new DroppedItem(
+			MEDPACK,
 			**player,
 			global_data.medpack_update_radius,
 			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,

@@ -1,8 +1,12 @@
 #pragma once
 
+#include <map>
+
 #include "../core/entity.h"
 
 #include "../core/animation.h"
+
+#include "item.h"
 
 
 namespace aft {
@@ -20,6 +24,8 @@ public:
 	std::vector<Entity*>& solid_tiles;
 
 	core::Animation player_animation;
+
+	std::map<ItemType, int> inventory;
 
 
 public:
