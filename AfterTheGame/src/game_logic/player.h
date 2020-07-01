@@ -28,6 +28,8 @@ public:
 	{
 		speed = s_speed;
 		hp = s_hp;
+
+		sprite_rel_position = { 0.0f, -64.0f };
 	}
 
 	void move(float elapsed_time);

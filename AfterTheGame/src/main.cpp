@@ -143,6 +143,9 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			int offset_x = entity->rect.x - camera.rect.x;
 			int offset_y = entity->rect.y - camera.rect.y;
 
+			offset_x += entity->sprite_rel_position.x;
+			offset_y += entity->sprite_rel_position.y;
+
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
 		}
@@ -163,6 +166,9 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			int offset_x = entity->rect.x - camera.rect.x;
 			int offset_y = entity->rect.y - camera.rect.y;
 
+			offset_x += entity->sprite_rel_position.x;
+			offset_y += entity->sprite_rel_position.y;
+
 			entity->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 			window->draw(entity->sprite);
 		}
@@ -173,6 +179,9 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 
 	int offset_x = player->rect.x - camera.rect.x;
 	int offset_y = player->rect.y - camera.rect.y;
+
+	offset_x += player->sprite_rel_position.x;
+	offset_y += player->sprite_rel_position.y;
 
 	player->sprite.setPosition(sf::Vector2f(offset_x, offset_y));
 	window->draw(player->sprite);

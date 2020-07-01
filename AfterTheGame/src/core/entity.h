@@ -19,6 +19,8 @@ public:
 		sprite.setTexture(*texture);
 		sf::Vector2u texture_size = sprite.getTexture()->getSize();
 		sprite.setScale(rect.width / texture_size.x, rect.height / texture_size.y);
+
+		sprite_rel_position = { 0.0f, 0.0f };
 	}
 
 	bool collides(Entity& entity)
