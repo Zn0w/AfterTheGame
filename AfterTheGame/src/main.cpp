@@ -100,6 +100,35 @@ void init()
 
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
+	// delete entities
+	npcs.erase(std::remove_if(npcs.begin(), npcs.end(),
+			[](aft::core::Entity* entity) -> bool {
+				if (entity->to_delete)
+				{
+					delete entity;
+					return true;
+				}
+				else
+					return false;
+			}
+		),
+		npcs.end()
+	);
+
+	interactables.erase(std::remove_if(interactables.begin(), interactables.end(),
+		[](aft::core::Entity* entity) -> bool {
+		if (entity->to_delete)
+		{
+			delete entity;
+			return true;
+		}
+		else
+			return false;
+	}
+	),
+		interactables.end()
+		);
+	
 	// render non-solid tiles
 	for (aft::core::Entity* entity : tilemap_nonsolid)
 	{

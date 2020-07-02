@@ -10,6 +10,7 @@ class Entity : public WorldObject
 public:
 	sf::Sprite sprite;
 	sf::Vector2f sprite_rel_position;	// position of sprite relative to the entity x and y
+	bool to_delete = false;
 
 
 public:

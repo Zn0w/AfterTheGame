@@ -30,9 +30,9 @@ public:
 			{
 				player.inventory.insert_or_assign(type, player.inventory[type] + 1);
 			}
-		}
 
-		// TODO : delete the dropped item
+			to_delete = true;
+		}
 	}
 };
 
