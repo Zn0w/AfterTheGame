@@ -60,6 +60,22 @@ void Player::update(float elapsed_time)
 		velocity.y = speed;
 	}
 
+	// make diagonal movement the same speed
+	// 0.70710678118 = 1 / sqrt(2)
+	if (velocity.x != 0.0f && velocity.y != 0.0f)
+	{
+		velocity = { velocity.x * 0.70710678118f, velocity.y * 0.70710678118f };
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	{
+		if (inventory[MEDPACK])
+		{
+			hp += 50;
+			inventory[MEDPACK] -= 1;
+		}
+	}
+
 	static float elapsed_count = 0.0f;
 	elapsed_count += elapsed_time;
 	

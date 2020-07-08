@@ -8,8 +8,8 @@
 #include "global_data.h"
 #include "player.h"
 #include "horse.h"
-#include "medicine_pack.h"
 #include "dropped_item.h"
+#include "char_bite_horse.h"
 
 
 namespace aft {
@@ -76,11 +76,52 @@ void spawn_entity(
 		DroppedItem* med_pack = new DroppedItem(
 			MEDPACK,
 			**player,
-			global_data.medpack_update_radius,
+			global_data.dropped_item_update_radius,
 			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
 			global_data.tile_size / 2.0f, global_data.tile_size / 4.0f),
 			textures["resources/med_pack.png"].location);
 		interactables.push_back(med_pack);
+	} break;
+
+	case 4: {
+		// if this texture wasn't previously loaded
+		if (textures.find("resources/gun.png") == textures.end())
+		{
+
+			if (!loadTexture("resources/gun.png", textures))
+			{
+				std::cout << "Failed to load texture (resources/gun.png)" << std::endl;
+			}
+		}
+
+		DroppedItem* gun = new DroppedItem(
+			GUN,
+			**player,
+			global_data.dropped_item_update_radius,
+			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
+				global_data.tile_size / 2.0f, global_data.tile_size / 2.0f),
+			textures["resources/gun.png"].location);
+		interactables.push_back(gun);
+	} break;
+
+	case 5: {
+		// if this texture wasn't previously loaded
+		if (textures.find("resources/horse_idle_cycle.png") == textures.end())
+		{
+
+			if (!loadTexture("resources/horse_idle_cycle.png", textures))
+			{
+				std::cout << "Failed to load texture (resources/horse_idle_cycle.png)" << std::endl;
+			}
+		}
+
+		CharBiteHorse* bite_horse = new CharBiteHorse(
+			**player,
+			global_data.dropped_item_update_radius,
+			core::Rect(position.x * global_data.tile_size, position.y * global_data.tile_size,
+				global_data.tile_size / 2.0f, global_data.tile_size / 2.0f),
+			textures["resources/horse_idle_cycle.png"].location);
+		interactables.push_back(bite_horse);
 	} break;
 
 	default: {

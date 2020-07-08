@@ -45,6 +45,8 @@ public:
 	void init();
 	
 	void update(float elapsed_time);
+
+	void apply_item();
 };
 
 }

@@ -14,7 +14,6 @@
 
 #include "game_logic/player.h"
 #include "game_logic/horse.h"
-#include "game_logic/medicine_pack.h"
 
 
 GlobalData global_data;
@@ -259,8 +258,11 @@ int main()
 		update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = "Camera (" + std::to_string(camera.rect.x) + ", " + std::to_string(camera.rect.y) + ")\nFPS: "
-			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\ninventory: \n";
+		std::string debug_string = std::to_string(camera.rect.x) + ", " + std::to_string(camera.rect.y) + "\nFPS: "
+			+ std::to_string(1000.0f / elapsed_time) + "  (" + std::to_string(elapsed_time) + ")\nHP: "
+			+ std::to_string(player->hp)
+			+ "\nVelocity (" + std::to_string(player->velocity.x) + ", " + std::to_string(player->velocity.y)
+			+ ")\ninventory: \n";
 
 		// list the player's inventory items in debug string
 		for (auto const& i : player->inventory)

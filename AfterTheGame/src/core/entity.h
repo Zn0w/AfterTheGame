@@ -22,6 +22,8 @@ public:
 		sprite.setScale(rect.width / texture_size.x, rect.height / texture_size.y);
 
 		sprite_rel_position = { 0.0f, 0.0f };
+
+		init();
 	}
 
 	bool collides(Entity& entity)
