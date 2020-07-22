@@ -130,31 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\camera.cpp" />
-    <ClCompile Include="src\core\random_generator.cpp" />
-    <ClCompile Include="src\core\resources_manager.cpp" />
-    <ClCompile Include="src\game_logic\horse.cpp" />
-    <ClCompile Include="src\game_logic\player.cpp" />
     <ClCompile Include="src\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\core\animation.h" />
-    <ClInclude Include="src\core\camera.h" />
-    <ClInclude Include="src\core\entity.h" />
-    <ClInclude Include="src\core\maths.h" />
-    <ClInclude Include="src\core\random_generator.h" />
-    <ClInclude Include="src\core\resources_manager.h" />
-    <ClInclude Include="src\game_logic\char_bite_horse.h" />
-    <ClInclude Include="src\game_logic\dialog.h" />
-    <ClInclude Include="src\game_logic\dropped_item.h" />
-    <ClInclude Include="src\game_logic\global_data.h" />
-    <ClInclude Include="src\game_logic\item.h" />
-    <ClInclude Include="src\game_logic\spawner.h" />
-    <ClInclude Include="src\core\world_object.h" />
-    <ClInclude Include="src\game_logic\horse.h" />
-    <ClInclude Include="src\game_logic\interactable_entity.h" />
-    <ClInclude Include="src\game_logic\living_entity.h" />
-    <ClInclude Include="src\game_logic\player.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\intro_level_01.aft_level" />
