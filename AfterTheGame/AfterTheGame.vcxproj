@@ -130,11 +130,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ecs\component.cpp" />
+    <ClCompile Include="src\ecs\entity.cpp" />
+    <ClCompile Include="src\ecs\scene.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\intro_level_01.aft_level" />
     <None Include="resources\testlevel_02.aft_level" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ecs\component.h" />
+    <ClInclude Include="src\ecs\entity.h" />
+    <ClInclude Include="src\ecs\scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
