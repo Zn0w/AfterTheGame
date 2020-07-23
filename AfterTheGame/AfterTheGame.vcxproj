@@ -141,8 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ecs\component.h" />
+    <ClInclude Include="src\ecs\ecs.h" />
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
+    <ClInclude Include="src\ecs\system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
