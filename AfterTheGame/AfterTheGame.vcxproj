@@ -140,6 +140,7 @@
     <None Include="resources\testlevel_02.aft_level" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\position.h" />
     <ClInclude Include="src\ecs\component.h" />
     <ClInclude Include="src\ecs\ecs.h" />
     <ClInclude Include="src\ecs\entity.h" />
