@@ -10,6 +10,7 @@
 #include "components/transform.h"
 #include "components/sprite.h"
 #include "components/move_control.h"
+#include "components/collider.h"
 
 
 bool running = false;
@@ -45,8 +46,9 @@ void init(sf::RenderWindow* window)
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
 	player.add_component<TransformComponent>(0.8f, sf::Vector2f(50.0f, 50.0f));
-	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], 50.0f, 50.0f);
+	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], sf::Vector2f(50.0f, 50.0f));
 	player.add_component<MoveControlComponent>();
+	player.add_component<ColliderComponent>(50.0f, 50.f, "player");
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
