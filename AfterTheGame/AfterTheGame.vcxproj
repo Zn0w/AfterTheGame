@@ -140,6 +140,7 @@
     <None Include="resources\testlevel_02.aft_level" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\collider.h" />
     <ClInclude Include="src\components\move_control.h" />
     <ClInclude Include="src\components\transform.h" />
     <ClInclude Include="src\components\sprite.h" />

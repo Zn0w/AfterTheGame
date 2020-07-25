@@ -11,7 +11,12 @@ struct MoveControlComponent : public ecs::Component
 
 	void init() override
 	{
-		transform_component = &entity->get_component<TransformComponent>();
+		if (!entity->has_component<TransformComponent>())
+		{
+			entity->add_component<TransformComponent>(0.0f, sf::Vector2f(0.0f, 0.0f));
+		}
+		
+		transform_component = &entity->get_component<TransformComponent>();	// NOTE : get_component<...> returns a reference, so it's valid to take address here
 	}
 	
 	void update(float delta) override
