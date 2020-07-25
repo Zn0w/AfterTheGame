@@ -13,7 +13,7 @@ template<typename T>
 inline uint32_t get_component_type_id()
 {
 	static uint32_t component_type_id = get_component_type_id();
-	return component_type_id();
+	return component_type_id;
 }
 
 #define MAX_COMPONENTS (32)

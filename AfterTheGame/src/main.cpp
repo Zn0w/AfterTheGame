@@ -6,11 +6,14 @@
 #include <SFML/Graphics.hpp>
 
 #include "ecs/system.h"
+#include "components/position.h"
 
 
 bool running = false;
 
 System ecs_system;
+
+auto& player = ecs_system.add_entity();
 
 sf::Font font;
 sf::Text debug_text;
@@ -26,6 +29,8 @@ void init()
 	}
 
 	// load entities and components (init system)
+	//auto& player = ecs_system.add_entity();
+	player.add_component<PositionComponent>(50.0f, 50.0f);
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
@@ -78,7 +83,7 @@ int main()
 		update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = "debug string";
+		std::string debug_string = std::to_string(player.get_component<PositionComponent>().x) + ", " + std::to_string(player.get_component<PositionComponent>().x);
 		
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
