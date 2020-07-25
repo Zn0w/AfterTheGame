@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "ecs/system.h"
-#include "components/position.h"
+#include "components/transform.h"
 #include "components/sprite.h"
 
 
@@ -43,7 +43,7 @@ void init(sf::RenderWindow* window)
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<PositionComponent>(50.0f, 50.0f);
+	player.add_component<TransformComponent>(10.0f, sf::Vector2f(50.0f, 50.0f));
 	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], 50.0f, 50.0f);
 
 	debug_text.setFont(font);
@@ -98,7 +98,8 @@ int main()
 		update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = std::to_string(player.get_component<PositionComponent>().x) + ", " + std::to_string(player.get_component<PositionComponent>().x);
+		std::string debug_string = "FPS: " + std::to_string(1000.0f / elapsed_time) + "\n" +
+			std::to_string(player.get_component<TransformComponent>().position.x) + ", " + std::to_string(player.get_component<TransformComponent>().position.x);
 		
 		debug_text.setString(debug_string);
 		window.draw(debug_text);

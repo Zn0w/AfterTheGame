@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../ecs/system.h"
-#include "position.h"
+#include "transform.h"
 
 
 struct SpriteComponent : public ecs::Component
@@ -27,7 +27,7 @@ struct SpriteComponent : public ecs::Component
 
 	void update(float delta) override
 	{
-		sprite.setPosition(entity->get_component<PositionComponent>().x, entity->get_component<PositionComponent>().y);
+		sprite.setPosition(entity->get_component<TransformComponent>().position.x, entity->get_component<TransformComponent>().position.y);
 
 		// draw the sprite
 		renderer->draw(sprite);
