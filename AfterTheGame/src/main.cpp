@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <cmath>
 
@@ -7,6 +8,7 @@
 
 #include "ecs/system.h"
 #include "components/position.h"
+#include "components/sprite.h"
 
 
 bool running = false;
@@ -15,11 +17,14 @@ System ecs_system;
 
 auto& player = ecs_system.add_entity();
 
+// temporary storage of assets
+std::map<std::string, sf::Texture*> textures;
+
 sf::Font font;
 sf::Text debug_text;
 
 
-void init()
+void init(sf::RenderWindow* window)
 {
 	running = true;
 
@@ -28,9 +33,18 @@ void init()
 		// error...
 	}
 
+	sf::Texture* hero_texture = new sf::Texture;
+	if (!hero_texture->loadFromFile("resources/hero.png"))
+	{
+		std::cout << "Failed to load the hero texture" << std::endl;
+	}
+	else
+		textures.insert(std::pair<std::string, sf::Texture*>("resources/hero.png", hero_texture));
+
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
 	player.add_component<PositionComponent>(50.0f, 50.0f);
+	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], 50.0f, 50.0f);
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
@@ -50,11 +64,11 @@ void destroy()
 
 
 int main()
-{
-	init();
-	
+{	
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "After");
+
+	init(&window);
 
 	sf::Clock clock;
 
