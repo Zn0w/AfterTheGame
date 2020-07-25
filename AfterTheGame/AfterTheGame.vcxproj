@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClCompile Include="src\ecs\component.cpp" />
     <ClCompile Include="src\ecs\entity.cpp" />
-    <ClCompile Include="src\ecs\scene.cpp" />
+    <ClCompile Include="src\ecs\system.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +143,6 @@
     <ClInclude Include="src\ecs\component.h" />
     <ClInclude Include="src\ecs\ecs.h" />
     <ClInclude Include="src\ecs\entity.h" />
-    <ClInclude Include="src\ecs\scene.h" />
     <ClInclude Include="src\ecs\system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

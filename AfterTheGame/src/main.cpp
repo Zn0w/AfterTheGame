@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "ecs/component.h"
+#include "ecs/system.h"
 
 
 bool running = false;

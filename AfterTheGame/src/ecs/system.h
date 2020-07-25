@@ -1,20 +1,14 @@
 #pragma once
 
-#include "component.h"
+#include "entity.h"
 
 
-class BaseECSSystem
+struct System
 {
-public:
-	BaseECSSystem(const std::vector<uint32_t> s_component_types)
-		: component_types(s_component_types)
-	{}
-
-	virtual void update_components(float delta, BaseECSComponent** components) {}
-
-	const std::vector<uint32_t>& get_component_types() { return component_types; }
+	std::vector<std::unique_ptr<Entity>> entities;
 
 
-private:
-	std::vector<uint32_t> component_types;
+	void update();
+	void refresh();
+	Entity& add_entity();
 };
