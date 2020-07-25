@@ -13,7 +13,7 @@
 
 bool running = false;
 
-System ecs_system;
+ecs::System ecs_system;
 
 auto& player = ecs_system.add_entity();
 
@@ -54,7 +54,8 @@ void init(sf::RenderWindow* window)
 
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
-	ecs_system.update();
+	ecs_system.refresh();
+	ecs_system.update(elapsed_time);
 }
 
 void destroy()

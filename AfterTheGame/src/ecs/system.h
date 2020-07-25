@@ -3,12 +3,14 @@
 #include "entity.h"
 
 
-struct System
-{
-	std::vector<std::unique_ptr<Entity>> entities;
+namespace ecs {
+	struct System
+	{
+		std::vector<std::unique_ptr<Entity>> entities;
 
 
-	void update();
-	void refresh();
-	Entity& add_entity();
-};
+		void update(float delta);
+		void refresh();
+		Entity& add_entity();
+	};
+}

@@ -6,7 +6,7 @@
 #include "position.h"
 
 
-struct SpriteComponent : public Component
+struct SpriteComponent : public ecs::Component
 {
 	sf::Sprite sprite;
 	sf::Texture* texture_handle;
@@ -25,7 +25,7 @@ struct SpriteComponent : public Component
 		sprite.setScale(width / texture_size.x, height / texture_size.y);
 	}
 
-	void update() override
+	void update(float delta) override
 	{
 		sprite.setPosition(entity->get_component<PositionComponent>().x, entity->get_component<PositionComponent>().y);
 

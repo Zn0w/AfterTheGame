@@ -1,16 +1,18 @@
 #include "entity.h"
 
 
-void Entity::update()
-{
-	for (auto& component : components)
-		component->update();
+namespace ecs {
+	void Entity::update(float delta)
+	{
+		for (auto& component : components)
+			component->update(delta);
 
-	//for (auto& component : components)
-		//component->draw();
-}
+		//for (auto& component : components)
+			//component->draw();
+	}
 
-void Entity::destroy()
-{
-	active = false;
+	void Entity::destroy()
+	{
+		active = false;
+	}
 }

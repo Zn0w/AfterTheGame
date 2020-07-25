@@ -3,7 +3,7 @@
 #include "../ecs/system.h"
 
 
-struct PositionComponent : public Component
+struct PositionComponent : public ecs::Component
 {
 	float x, y;
 
