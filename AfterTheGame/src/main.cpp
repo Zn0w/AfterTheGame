@@ -9,6 +9,7 @@
 #include "ecs/system.h"
 #include "components/transform.h"
 #include "components/sprite.h"
+#include "components/move_control.h"
 
 
 bool running = false;
@@ -43,8 +44,9 @@ void init(sf::RenderWindow* window)
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<TransformComponent>(10.0f, sf::Vector2f(50.0f, 50.0f));
+	player.add_component<TransformComponent>(0.8f, sf::Vector2f(50.0f, 50.0f));
 	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], 50.0f, 50.0f);
+	player.add_component<MoveControlComponent>();
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
@@ -99,7 +101,7 @@ int main()
 		
 		// display debug info
 		std::string debug_string = "FPS: " + std::to_string(1000.0f / elapsed_time) + "\n" +
-			std::to_string(player.get_component<TransformComponent>().position.x) + ", " + std::to_string(player.get_component<TransformComponent>().position.x);
+			std::to_string(player.get_component<TransformComponent>().position.x) + ", " + std::to_string(player.get_component<TransformComponent>().position.y);
 		
 		debug_text.setString(debug_string);
 		window.draw(debug_text);
