@@ -143,7 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\assets_managing\assets_manager.h" />
-    <ClInclude Include="src\components\camera_follow.h" />
     <ClInclude Include="src\components\collider.h" />
     <ClInclude Include="src\components\move_control.h" />
     <ClInclude Include="src\components\script.h" />

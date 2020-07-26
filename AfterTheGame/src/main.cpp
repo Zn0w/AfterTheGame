@@ -13,7 +13,6 @@
 #include "components/move_control.h"
 #include "components/collider.h"
 #include "components/script.h"
-#include "components/camera_follow.h"
 
 #include "scripts/collision.h"
 
@@ -77,13 +76,16 @@ void init(sf::RenderWindow* window)
 			tile.add_component<TransformComponent>(0.0f, sf::Vector2f(j * 64.0f, i * 64.0f));
 			tile.add_component<SpriteComponent>(window, textures[textures_dictionary[tilemap.at(i).at(j)]], sf::Vector2f(64.0f, 64.0f));
 			if (collision_map.at(i).at(j) == '1')
-				tile.add_component<ColliderComponent>(64.0f, 64.f, "solid_tile");
+			{
+				auto& collider = tile.add_component<ColliderComponent>(64.0f, 64.f, "solid_tile");
+				colliders.push_back(&collider);
+			}
 		}
 	}
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<TransformComponent>(0.8f, sf::Vector2f(50.0f, 50.0f));
+	player.add_component<TransformComponent>(0.8f, sf::Vector2f(300.0f, 300.0f));
 	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], sf::Vector2f(50.0f, 50.0f));
 	player.add_component<MoveControlComponent>();
 	
@@ -91,11 +93,6 @@ void init(sf::RenderWindow* window)
 	colliders.push_back(&player_collider);
 
 	player.add_component<ScriptComponent>(player_script, colliders);
-	//player.add_component<CameraFollowComponent>(
-	//	sf::Vector2f(-800.0f, -450.0f),
-	//	sf::Vector2f(1600.0f, 900.0f)
-	//);
-	//player.get_component<SpriteComponent>().draw = true;
 
 	// top & left are offsets relative to the player position
 	camera = { -800.0f, -450.0f, 1600.0f, 900.0f };

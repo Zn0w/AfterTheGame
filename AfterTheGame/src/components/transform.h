@@ -10,6 +10,7 @@ struct TransformComponent : public ecs::Component
 	float speed;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
+	sf::Vector2f previous_position;
 
 
 	TransformComponent(float s_speed, sf::Vector2f s_position)
@@ -22,6 +23,8 @@ struct TransformComponent : public ecs::Component
 
 	void update(float delta) override
 	{
+		previous_position = position;
+		
 		position.x += velocity.x * speed * delta;
 		position.y += velocity.y * speed * delta;
 	}
