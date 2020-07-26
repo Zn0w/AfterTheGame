@@ -110,12 +110,17 @@ void create_entities(LevelData& level, std::vector<ColliderComponent*>& collider
 		{
 			if (collision_map.at(i).at(j) == '1')
 			{
-				create_game_object(level.ecs_system, colliders, renderer, SOLID_TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { i, j }, 1.0f);
+				create_game_object(level.ecs_system, colliders, renderer, SOLID_TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
 			}
 			else
 			{
-				create_game_object(level.ecs_system, colliders, renderer, TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { i, j }, 1.0f);
+				create_game_object(level.ecs_system, colliders, renderer, TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
 			}
 		}
+	}
+
+	for (SpawnData spawn_data : level.spawns)
+	{
+		create_game_object(level.ecs_system, colliders, renderer, (GameObjectID)spawn_data.id, textures, spawn_data.position, 1.0f);
 	}
 }
