@@ -17,6 +17,10 @@ struct SpriteComponent : public ecs::Component
 
 	TransformComponent* transform_component;
 
+	bool draw = false;
+
+	sf::Vector2f camera_offset;	// an offset of sprite position relative to the camera
+
 
 	SpriteComponent(sf::RenderWindow* window, sf::Texture* s_texture_handle, sf::Vector2f s_size)
 		: renderer(window), texture_handle(s_texture_handle), size(s_size), offset(0.0f, 0.0f)
@@ -38,13 +42,18 @@ struct SpriteComponent : public ecs::Component
 		sprite.setTexture(*texture_handle);
 		sf::Vector2u texture_size = sprite.getTexture()->getSize();
 		sprite.setScale(size.x / texture_size.x, size.y / texture_size.y);
+
+		camera_offset = { 0.0f, 0.0f };
 	}
 
 	void update(float delta) override
 	{
-		sprite.setPosition(transform_component->position.x, transform_component->position.y);
+		if (draw)
+		{
+			sprite.setPosition(camera_offset.x, camera_offset.y);
 
-		// draw the sprite
-		renderer->draw(sprite);
+			// draw the sprite
+			renderer->draw(sprite);
+		}
 	}
 };

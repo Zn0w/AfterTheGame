@@ -10,5 +10,5 @@ void player_script(ecs::Entity* entity, std::vector<ColliderComponent*>& collide
 	static TransformComponent* transform_component = &entity->get_component<TransformComponent>();
 	
 	// constantly pull the player down
-	transform_component->velocity.y += 0.5f;
+	//transform_component->velocity.y += 0.5f;
 }

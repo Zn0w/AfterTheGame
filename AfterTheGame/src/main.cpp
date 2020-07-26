@@ -13,6 +13,9 @@
 #include "components/move_control.h"
 #include "components/collider.h"
 #include "components/script.h"
+#include "components/camera_follow.h"
+
+#include "scripts/collision.h"
 
 #include "scripts/player.h"
 #include "scripts/box.h"
@@ -68,7 +71,7 @@ void init(sf::RenderWindow* window)
 	{
 		for (int j = 0; j < tilemap.at(i).length(); j++)
 		{
-			auto& tile = ecs_system.add_entity();
+			auto& tile = current_level->ecs_system.add_entity();
 			tile.add_component<TransformComponent>(0.0f, sf::Vector2f(j * 64.0f, i * 64.0f));
 			tile.add_component<SpriteComponent>(window, textures[textures_dictionary[tilemap.at(i).at(j)]], sf::Vector2f(64.0f, 64.0f));
 			if (collision_map.at(i).at(j) == '1')
@@ -86,6 +89,11 @@ void init(sf::RenderWindow* window)
 	colliders.push_back(&player_collider);
 
 	player.add_component<ScriptComponent>(player_script, colliders);
+	player.add_component<CameraFollowComponent>(
+		sf::Vector2f(-800.0f, -450.0f),
+		sf::Vector2f(1600.0f, 900.0f)
+	);
+	player.get_component<SpriteComponent>().draw = true;
 
 	auto& box = ecs_system.add_entity();
 	box.add_component<TransformComponent>(0.0f, sf::Vector2f(950.0f, 400.0f));
@@ -104,6 +112,39 @@ void init(sf::RenderWindow* window)
 
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
+	// camera
+	CameraFollowComponent* camera_component = &player.get_component<CameraFollowComponent>();
+	TransformComponent* transform_component = &player.get_component<TransformComponent>();
+	
+	sf::FloatRect camera_rect(	camera_component->offset.x + transform_component->position.x,
+								camera_component->offset.y + transform_component->position.y,
+								camera_component->offset.x + transform_component->position.x + camera_component->size.x,
+								camera_component->offset.y + transform_component->position.y + camera_component->size.y
+	);
+
+	for (auto& entity : current_level->ecs_system.entities)
+	{
+		if (entity->has_component<SpriteComponent>())
+		{
+			sf::FloatRect sprite_rect(
+				entity->get_component<TransformComponent>().position.x + entity->get_component<SpriteComponent>().offset.x,
+				entity->get_component<TransformComponent>().position.y + entity->get_component<SpriteComponent>().offset.y,
+				entity->get_component<SpriteComponent>().size.x,
+				entity->get_component<SpriteComponent>().size.y
+			);
+
+			if (collide(camera_rect, sprite_rect))
+			{
+				entity->get_component<SpriteComponent>().draw = true;
+				entity->get_component<SpriteComponent>().camera_offset = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
+			}
+			else
+			{
+				entity->get_component<SpriteComponent>().draw = false;
+			}
+		}
+	}
+	
 	current_level->ecs_system.refresh();
 	current_level->ecs_system.update(elapsed_time);
 
