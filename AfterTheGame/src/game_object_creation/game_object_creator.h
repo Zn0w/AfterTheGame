@@ -28,19 +28,71 @@ enum GameObjectID
 };
 
 #define TILE_SIZE (64.0f)
+
 #define PLAYER_WIDTH (64.0f)
 #define PLAYER_HEIGHT (64.0f)
+
 #define HORSE_SPEED (0.3f)
 #define HORSE_WIDTH (64.0f)
 #define HORSE_HEIGHT (64.0f)
 
+#define GUN_WIDTH (16.0f)
+#define GUN_HEIGHT (16.0f)
 
-void create_tile(ecs::System& ecs_system, sf::RenderWindow* renderer, sf::Texture* texture, sf::Vector2i position, float scale);
-void create_solid_tile(ecs::System& ecs_system, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, sf::Texture* texture, sf::Vector2i position, float scale);
-void create_player(ecs::System& ecs_system, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, sf::Texture* texture, sf::Vector2i position, float scale);
-void create_horse(ecs::System& ecs_system, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, sf::Texture* texture, sf::Vector2i position, float scale);
+#define MEDPACK_WIDTH (32.0f)
+#define MEDPACK_HEIGHT (16.0f)
 
-void create_game_object(ecs::System& ecs_system, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, GameObjectID id, sf::Texture* textures, sf::Vector2i position, float scale);
-void create_game_object(ecs::System& ecs_system, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, GameObjectID id, std::map<std::string, sf::Texture*>& textures, sf::Vector2i position, float scale);
 
-void spawn_game_objects(LevelData& level, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, std::map<std::string, sf::Texture*>& textures);
+static void create_tile(
+	ecs::System& ecs_system,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+static void create_solid_tile(
+	ecs::System& ecs_system,
+	std::vector<ColliderComponent*>& colliders,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+static void create_horse(
+	ecs::System& ecs_system,
+	std::vector<ColliderComponent*>& colliders,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+static void create_gun(
+	ecs::System& ecs_system,
+	std::vector<ColliderComponent*>& colliders,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+static void create_medpack(
+	ecs::System& ecs_system,
+	std::vector<ColliderComponent*>& colliders,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+static void create_unknown(
+	ecs::System& ecs_system,
+	sf::RenderWindow* renderer,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
+
+void spawn_game_objects(
+	LevelData& level,
+	std::vector<ColliderComponent*>& colliders,
+	sf::RenderWindow* renderer,
+	std::map<std::string, sf::Texture*>& textures
+);
