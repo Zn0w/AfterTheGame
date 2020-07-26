@@ -21,6 +21,8 @@
 
 #include "assets_managing/assets_manager.h"
 
+#include "game_object_creation/game_object_creator.h"
+
 
 bool running = false;
 
@@ -34,7 +36,6 @@ LevelData* current_level = 0;
 
 std::vector<ColliderComponent*> colliders;
 
-// temporary storage of assets
 std::map<std::string, sf::Texture*> textures;
 std::map<std::string, LevelData> levels;
 
@@ -73,7 +74,7 @@ void init(sf::RenderWindow* window)
 	}
 
 	current_level = &levels["resources/intro_level_01.aft_level"];
-	create_entities(*current_level, colliders, window, textures);
+	spawn_game_objects(*current_level, colliders, window, textures);
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();

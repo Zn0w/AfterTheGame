@@ -97,30 +97,9 @@ bool get_initial_level_data(std::string path, std::map<std::string, sf::Texture*
 
 		return true;
 	}
-}
-
-void create_entities(LevelData& level, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, std::map<std::string, sf::Texture*>& textures)
-{
-	auto& tilemap = level.tilemap;
-	auto& collision_map = level.collision_map;
-	auto& textures_dictionary = level.textures_dictionary;
-	for (int i = 0; i < tilemap.size(); i++)
+	else
 	{
-		for (int j = 0; j < tilemap.at(i).length(); j++)
-		{
-			if (collision_map.at(i).at(j) == '1')
-			{
-				create_game_object(level.ecs_system, colliders, renderer, SOLID_TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
-			}
-			else
-			{
-				create_game_object(level.ecs_system, colliders, renderer, TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
-			}
-		}
-	}
-
-	for (SpawnData spawn_data : level.spawns)
-	{
-		create_game_object(level.ecs_system, colliders, renderer, (GameObjectID)spawn_data.id, textures, spawn_data.position, 1.0f);
+		std::cout << "Failed to open level file (" << path << ")" << std::endl;
+		return false;
 	}
 }

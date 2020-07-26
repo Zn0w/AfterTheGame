@@ -155,6 +155,7 @@
     <ClInclude Include="src\game_object_creation\game_object_creator.h" />
     <ClInclude Include="src\scripts\box.h" />
     <ClInclude Include="src\scripts\collision.h" />
+    <ClInclude Include="src\scripts\horse.h" />
     <ClInclude Include="src\scripts\player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

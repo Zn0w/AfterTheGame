@@ -9,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "../ecs/system.h"
-#include "../game_object_creation/game_object_creator.h"
 
 
 struct SpawnData
@@ -44,5 +43,3 @@ struct LevelData
 bool load_texture(std::string path, std::map<std::string, sf::Texture*>& textures);
 
 bool get_initial_level_data(std::string path, std::map<std::string, sf::Texture*>& textures, std::map<std::string, LevelData>& levels);
-
-void create_entities(LevelData& level, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, std::map<std::string, sf::Texture*>& textures);

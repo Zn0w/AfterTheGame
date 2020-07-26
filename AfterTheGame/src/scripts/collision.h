@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 
-bool collide(sf::FloatRect& a, sf::FloatRect& b)
+inline bool collide(sf::FloatRect& a, sf::FloatRect& b)
 {
 	return	a.left <= b.left + b.width &&
 			a.left + a.width >= b.left &&
