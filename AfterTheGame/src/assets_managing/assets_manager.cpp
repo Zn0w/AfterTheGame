@@ -1,7 +1,7 @@
 #include "assets_manager.h"
 
 
-bool loadTexture(std::string path, std::map<std::string, sf::Texture*>& textures)
+bool load_texture(std::string path, std::map<std::string, sf::Texture*>& textures)
 {
 	sf::Texture* texture = new sf::Texture;
 	if (!texture->loadFromFile(path))
@@ -76,7 +76,8 @@ bool get_initial_level_data(std::string path, std::map<std::string, sf::Texture*
 
 		level_file.close();
 
-		levels.insert(std::pair<std::string, LevelData>(path, level));
+		// level has ecs system, which has unique_ptr (they are not copyable), so use std::move
+		levels.insert(std::pair<std::string, LevelData>(path, std::move(level)));
 
 		std::cout << "The level is successfully loaded (" << path << ")" << std::endl;
 
@@ -87,7 +88,7 @@ bool get_initial_level_data(std::string path, std::map<std::string, sf::Texture*
 			if (textures.find(i.second) == textures.end())
 			{
 
-				if (!loadTexture(i.second, textures))
+				if (!load_texture(i.second, textures))
 				{
 					std::cout << "One or more textures of the level couldn't be loaded (" << i.second << ")" << std::endl;
 				}

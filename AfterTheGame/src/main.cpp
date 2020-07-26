@@ -52,14 +52,11 @@ void init(sf::RenderWindow* window)
 	}
 	else
 		textures.insert(std::pair<std::string, sf::Texture*>("resources/hero.png", hero_texture));
-
-	sf::Texture* grass_texture = new sf::Texture;
-	if (!grass_texture->loadFromFile("resources/grass.png"))
+	
+	if (!get_initial_level_data("resources/intro_level_01.aft_level", textures, levels))
 	{
-		std::cout << "Failed to load the grass texture" << std::endl;
+		std::cout << "Failed to load the intro level" << std::endl;
 	}
-	else
-		textures.insert(std::pair<std::string, sf::Texture*>("resources/grass.png", grass_texture));
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();

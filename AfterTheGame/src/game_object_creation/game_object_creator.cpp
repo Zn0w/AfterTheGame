@@ -3,7 +3,8 @@
 
 static void create_tile(ecs::System& ecs_system)
 {
-	
+	//auto& tile = ecs_system.add_entity();
+	//tile.add_component<TransformComponent>();
 }
 
 static void create_player(ecs::System& ecs_system)

@@ -130,9 +130,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\assets_managing\assets_manager.cpp" />
     <ClCompile Include="src\ecs\component.cpp" />
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\system.cpp" />
+    <ClCompile Include="src\game_object_creation\game_object_creator.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +142,7 @@
     <None Include="resources\testlevel_02.aft_level" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\assets_managing\assets_manager.h" />
     <ClInclude Include="src\components\collider.h" />
     <ClInclude Include="src\components\move_control.h" />
     <ClInclude Include="src\components\script.h" />
@@ -149,6 +152,7 @@
     <ClInclude Include="src\ecs\ecs.h" />
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\system.h" />
+    <ClInclude Include="src\game_object_creation\game_object_creator.h" />
     <ClInclude Include="src\scripts\box.h" />
     <ClInclude Include="src\scripts\collision.h" />
     <ClInclude Include="src\scripts\player.h" />
