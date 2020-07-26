@@ -99,7 +99,23 @@ bool get_initial_level_data(std::string path, std::map<std::string, sf::Texture*
 	}
 }
 
-void create_entities(LevelData& level)
+void create_entities(LevelData& level, std::vector<ColliderComponent*>& colliders, sf::RenderWindow* renderer, std::map<std::string, sf::Texture*>& textures)
 {
-	
+	auto& tilemap = level.tilemap;
+	auto& collision_map = level.collision_map;
+	auto& textures_dictionary = level.textures_dictionary;
+	for (int i = 0; i < tilemap.size(); i++)
+	{
+		for (int j = 0; j < tilemap.at(i).length(); j++)
+		{
+			if (collision_map.at(i).at(j) == '1')
+			{
+				create_game_object(level.ecs_system, colliders, renderer, SOLID_TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { i, j }, 1.0f);
+			}
+			else
+			{
+				create_game_object(level.ecs_system, colliders, renderer, TILE, textures[textures_dictionary[tilemap.at(i).at(j)]], { i, j }, 1.0f);
+			}
+		}
+	}
 }

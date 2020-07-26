@@ -65,23 +65,7 @@ void init(sf::RenderWindow* window)
 	}
 
 	current_level = &levels["resources/intro_level_01.aft_level"];
-	auto& tilemap = current_level->tilemap;
-	auto& collision_map = current_level->collision_map;
-	auto& textures_dictionary = current_level->textures_dictionary;
-	for (int i = 0; i < tilemap.size(); i++)
-	{
-		for (int j = 0; j < tilemap.at(i).length(); j++)
-		{
-			auto& tile = current_level->ecs_system.add_entity();
-			tile.add_component<TransformComponent>(0.0f, sf::Vector2f(j * 64.0f, i * 64.0f));
-			tile.add_component<SpriteComponent>(window, textures[textures_dictionary[tilemap.at(i).at(j)]], sf::Vector2f(64.0f, 64.0f));
-			if (collision_map.at(i).at(j) == '1')
-			{
-				auto& collider = tile.add_component<ColliderComponent>(64.0f, 64.f, "solid_tile");
-				colliders.push_back(&collider);
-			}
-		}
-	}
+	create_entities(*current_level, colliders, window, textures);
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
