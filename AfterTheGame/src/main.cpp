@@ -15,6 +15,7 @@
 #include "components/script.h"
 
 #include "scripts/player.h"
+#include "scripts/box.h"
 
 
 bool running = false;
@@ -22,6 +23,8 @@ bool running = false;
 ecs::System ecs_system;
 
 auto& player = ecs_system.add_entity();
+
+std::vector<ColliderComponent*> colliders;
 
 // temporary storage of assets
 std::map<std::string, sf::Texture*> textures;
@@ -47,13 +50,33 @@ void init(sf::RenderWindow* window)
 	else
 		textures.insert(std::pair<std::string, sf::Texture*>("resources/hero.png", hero_texture));
 
+	sf::Texture* grass_texture = new sf::Texture;
+	if (!grass_texture->loadFromFile("resources/grass.png"))
+	{
+		std::cout << "Failed to load the grass texture" << std::endl;
+	}
+	else
+		textures.insert(std::pair<std::string, sf::Texture*>("resources/grass.png", grass_texture));
+
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
 	player.add_component<TransformComponent>(0.8f, sf::Vector2f(50.0f, 50.0f));
 	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], sf::Vector2f(50.0f, 50.0f));
 	player.add_component<MoveControlComponent>();
-	player.add_component<ColliderComponent>(50.0f, 50.f, "player");
-	player.add_component<ScriptComponent>(player_script);
+	
+	auto& player_collider = player.add_component<ColliderComponent>(50.0f, 50.f, "player");
+	colliders.push_back(&player_collider);
+
+	player.add_component<ScriptComponent>(player_script, colliders);
+
+	auto& box = ecs_system.add_entity();
+	box.add_component<TransformComponent>(0.0f, sf::Vector2f(950.0f, 400.0f));
+	box.add_component<SpriteComponent>(window, textures["resources/grass.png"], sf::Vector2f(80.0f, 80.0f));
+	
+	auto& box_collider = box.add_component<ColliderComponent>(80.0f, 80.f, "box");
+	colliders.push_back(&box_collider);
+	
+	box.add_component<ScriptComponent>(box_script, colliders);
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
