@@ -19,7 +19,7 @@ struct SpriteComponent : public ecs::Component
 
 	bool draw = false;
 
-	sf::Vector2f camera_offset;	// an offset of sprite position relative to the camera
+	sf::Vector2f relative_position;	// sprite position relative to the camera
 
 
 	SpriteComponent(sf::RenderWindow* window, sf::Texture* s_texture_handle, sf::Vector2f s_size)
@@ -43,14 +43,14 @@ struct SpriteComponent : public ecs::Component
 		sf::Vector2u texture_size = sprite.getTexture()->getSize();
 		sprite.setScale(size.x / texture_size.x, size.y / texture_size.y);
 
-		camera_offset = { 0.0f, 0.0f };
+		relative_position = { 0.0f, 0.0f };
 	}
 
 	void update(float delta) override
 	{
 		if (draw)
 		{
-			sprite.setPosition(camera_offset.x, camera_offset.y);
+			sprite.setPosition(relative_position.x, relative_position.y);
 
 			// draw the sprite
 			renderer->draw(sprite);
