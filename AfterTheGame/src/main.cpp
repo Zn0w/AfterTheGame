@@ -26,6 +26,8 @@ ecs::System ecs_system;
 
 auto& player = ecs_system.add_entity();
 
+LevelData* current_level = 0;
+
 std::vector<ColliderComponent*> colliders;
 
 // temporary storage of assets
@@ -58,6 +60,22 @@ void init(sf::RenderWindow* window)
 		std::cout << "Failed to load the intro level" << std::endl;
 	}
 
+	current_level = &levels["resources/intro_level_01.aft_level"];
+	auto& tilemap = current_level->tilemap;
+	auto& collision_map = current_level->collision_map;
+	auto& textures_dictionary = current_level->textures_dictionary;
+	for (int i = 0; i < tilemap.size(); i++)
+	{
+		for (int j = 0; j < tilemap.at(i).length(); j++)
+		{
+			auto& tile = ecs_system.add_entity();
+			tile.add_component<TransformComponent>(0.0f, sf::Vector2f(j * 64.0f, i * 64.0f));
+			tile.add_component<SpriteComponent>(window, textures[textures_dictionary[tilemap.at(i).at(j)]], sf::Vector2f(64.0f, 64.0f));
+			if (collision_map.at(i).at(j) == '1')
+				tile.add_component<ColliderComponent>(64.0f, 64.f, "solid_tile");
+		}
+	}
+
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
 	player.add_component<TransformComponent>(0.8f, sf::Vector2f(50.0f, 50.0f));
@@ -86,7 +104,10 @@ void init(sf::RenderWindow* window)
 
 void update_and_render(float elapsed_time, sf::RenderWindow* window)
 {
-	ecs_system.refresh();
+	current_level->ecs_system.refresh();
+	current_level->ecs_system.update(elapsed_time);
+
+	//ecs_system.refresh();
 	ecs_system.update(elapsed_time);
 }
 
