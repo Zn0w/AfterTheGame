@@ -7,10 +7,14 @@
 #include <SFML/Graphics.hpp>
 
 #include "ecs/system.h"
+
 #include "components/transform.h"
 #include "components/sprite.h"
 #include "components/move_control.h"
 #include "components/collider.h"
+#include "components/script.h"
+
+#include "scripts/player.h"
 
 
 bool running = false;
@@ -49,6 +53,7 @@ void init(sf::RenderWindow* window)
 	player.add_component<SpriteComponent>(window, textures["resources/hero.png"], sf::Vector2f(50.0f, 50.0f));
 	player.add_component<MoveControlComponent>();
 	player.add_component<ColliderComponent>(50.0f, 50.f, "player");
+	player.add_component<ScriptComponent>(player_script);
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
