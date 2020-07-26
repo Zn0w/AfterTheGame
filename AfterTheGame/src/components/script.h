@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ecs/system.h"
+#include "../components/collider.h"
 
 
 struct ScriptComponent : public ecs::Component

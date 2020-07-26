@@ -2,6 +2,7 @@
 
 #include "../ecs/system.h"
 #include "../components/transform.h"
+#include "../components/collider.h"
 
 
 void player_script(ecs::Entity* entity, std::vector<ColliderComponent*>& colliders)

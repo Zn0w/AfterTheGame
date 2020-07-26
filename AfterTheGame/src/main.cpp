@@ -17,6 +17,8 @@
 #include "scripts/player.h"
 #include "scripts/box.h"
 
+#include "assets_managing/assets_manager.h"
+
 
 bool running = false;
 
@@ -28,6 +30,7 @@ std::vector<ColliderComponent*> colliders;
 
 // temporary storage of assets
 std::map<std::string, sf::Texture*> textures;
+std::map<std::string, LevelData> levels;
 
 sf::Font font;
 sf::Text debug_text;
