@@ -23,14 +23,25 @@ struct AnimationComponent : public ecs::Component
 	sf::Vector2u frame_size;
 
 	int current_frame = 0;
-	int current_index = 0;
 	float delta_count = 0.0f;
 	int frame_direction = 1;
 
+private:
+	int current_index = 0;
+
+public:
 
 	AnimationComponent(sf::RenderWindow* s_renderer, sf::Texture* s_texture, std::map<unsigned int, unsigned int> s_indecies_frames, float s_speed)
 		: renderer(s_renderer), texture(s_texture), indecies_frames(s_indecies_frames), speed(s_speed)
 	{}
+
+	void change_index(unsigned int index)
+	{
+		current_index = index;
+		current_frame = 0;
+		frame_direction = 1;
+		//delta_count = 0.0f;
+	}
 
 	void init() override
 	{

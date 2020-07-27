@@ -30,7 +30,7 @@ enum GameObjectID
 
 #define TILE_SIZE (64.0f)
 
-#define PLAYER_WIDTH (64.0f)
+#define PLAYER_WIDTH (32.0f)
 #define PLAYER_HEIGHT (64.0f)
 
 #define HORSE_SPEED (0.3f)
