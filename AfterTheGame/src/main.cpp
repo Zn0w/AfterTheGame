@@ -68,12 +68,15 @@ void init(sf::RenderWindow* window)
 	}
 
 	current_level = &levels["resources/intro_level_01.aft_level"];
-	spawn_game_objects(*current_level, colliders, textures);
+	spawn_game_objects(*current_level, colliders, sprites, textures);
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
 	player.add_component<TransformComponent>(0.8f, sf::Vector2f(300.0f, 300.0f));
-	player.add_component<SpriteComponent>(textures["resources/guy.png"], sf::Vector2f(PLAYER_SIZE));
+	
+	auto& sprite = player.add_component<SpriteComponent>(textures["resources/guy.png"], sf::Vector2f(PLAYER_SIZE));
+	sprites.push_back(&sprite);
+
 	player.add_component<MoveControlComponent>();
 
 	std::map<unsigned int, unsigned int> player_animation_indecies_frames = { { 0, 3 },{ 1, 3 }, { 2, 3 },{ 3, 3 },{ 4, 3 } };
@@ -86,15 +89,6 @@ void init(sf::RenderWindow* window)
 
 	// top & left are offsets relative to the player position
 	camera = { -800.0f, -450.0f, 1600.0f, 900.0f };
-
-	auto& box = ecs_system.add_entity();
-	box.add_component<TransformComponent>(0.0f, sf::Vector2f(950.0f, 400.0f));
-	box.add_component<SpriteComponent>(textures["resources/grass.png"], sf::Vector2f(80.0f, 80.0f));
-	
-	auto& box_collider = box.add_component<ColliderComponent>(80.0f, 80.f, "box");
-	colliders.push_back(&box_collider);
-	
-	box.add_component<ScriptComponent>(box_script, colliders);
 
 	debug_text.setFont(font);
 	debug_text.setCharacterSize(16);
@@ -110,27 +104,46 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 								camera.width,
 								camera.height
 	);
-	for (auto& entity : current_level->ecs_system.entities)
-	{
-		if (entity->has_component<SpriteComponent>())
-		{
-			SpriteComponent& sprite_component = entity->get_component<SpriteComponent>();
-			
-			sf::FloatRect sprite_rect(
-				entity->get_component<TransformComponent>().position.x + sprite_component.offset.x,
-				entity->get_component<TransformComponent>().position.y + sprite_component.offset.y,
-				sprite_component.size.x,
-				sprite_component.size.y
-			);
 
-			if (collide(camera_rect, sprite_rect))
-			{
-				// draw the sprite
-				// sprite position relative to the camera
-				sf::Vector2f relative_position = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
-				sprite_component.sprite.setPosition(relative_position.x, relative_position.y);
-				window->draw(sprite_component.sprite);
-			}
+	// first, draw tiles of current_level
+	for (SpriteComponent* tile_sprite : current_level->tiles_sprites)
+	{
+		sf::FloatRect sprite_rect(
+			tile_sprite->entity->get_component<TransformComponent>().position.x + tile_sprite->offset.x,
+			tile_sprite->entity->get_component<TransformComponent>().position.y + tile_sprite->offset.y,
+			tile_sprite->size.x,
+			tile_sprite->size.y
+		);
+
+		if (collide(camera_rect, sprite_rect))
+		{
+			// draw the sprite
+			// sprite position relative to the camera
+			sf::Vector2f relative_position = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
+			tile_sprite->sprite.setPosition(relative_position.x, relative_position.y);
+			window->draw(tile_sprite->sprite);
+		}
+	}
+
+	// TODO : check if entity has been destroyed, if so, erase it's sprite from the sprites
+	// TODO : use one sf::Sprite object for the same kind of sprite_component
+	// then, draw the rest of sprites
+	for (SpriteComponent* sprite_component : sprites)
+	{
+		sf::FloatRect sprite_rect(
+			sprite_component->entity->get_component<TransformComponent>().position.x + sprite_component->offset.x,
+			sprite_component->entity->get_component<TransformComponent>().position.y + sprite_component->offset.y,
+			sprite_component->size.x,
+			sprite_component->size.y
+		);
+
+		if (collide(camera_rect, sprite_rect))
+		{
+			// draw the sprite
+			// sprite position relative to the camera
+			sf::Vector2f relative_position = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
+			sprite_component->sprite.setPosition(relative_position.x, relative_position.y);
+			window->draw(sprite_component->sprite);
 		}
 	}
 	
@@ -138,30 +151,6 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	current_level->ecs_system.update(elapsed_time);
 
 	// global ecs_system is for player object and special objects that have something to do with the player
-	for (auto& entity : ecs_system.entities)
-	{
-		if (entity->has_component<SpriteComponent>())
-		{
-			SpriteComponent& sprite_component = entity->get_component<SpriteComponent>();
-			
-			sf::FloatRect sprite_rect(
-				entity->get_component<TransformComponent>().position.x + sprite_component.offset.x,
-				entity->get_component<TransformComponent>().position.y + sprite_component.offset.y,
-				sprite_component.size.x,
-				sprite_component.size.y
-			);
-
-			if (collide(camera_rect, sprite_rect))
-			{
-				// draw the sprite
-				// sprite position relative to the camera
-				sf::Vector2f relative_position = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
-				sprite_component.sprite.setPosition(relative_position.x, relative_position.y);
-				window->draw(sprite_component.sprite);
-			}
-		}
-	}
-	
 	ecs_system.refresh();
 	ecs_system.update(elapsed_time);
 }
