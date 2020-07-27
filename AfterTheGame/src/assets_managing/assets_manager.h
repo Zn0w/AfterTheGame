@@ -25,9 +25,9 @@ struct LevelData
 	std::map<char, std::string> textures_dictionary;
 	std::vector<SpawnData> spawns;
 	
-	ecs::System ecs_system;
-
 	std::vector<SpriteComponent*> tiles_sprites;
+
+	ecs::System ecs_system;
 
 
 	LevelData() {}

@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <cmath>
+#include <list>
 
 #include <SFML/Graphics.hpp>
 
@@ -125,8 +126,11 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 		}
 	}
 
-	// TODO : check if entity has been destroyed, if so, erase it's sprite from the sprites
+	// TODO : check if entity has been destroyed, if so, erase its sprite from the sprites
 	// TODO : use one sf::Sprite object for the same kind of sprite_component
+
+	std::list<sf::Sprite*> to_draw;
+	
 	// then, draw the rest of sprites
 	for (SpriteComponent* sprite_component : sprites)
 	{
@@ -143,8 +147,23 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 			// sprite position relative to the camera
 			sf::Vector2f relative_position = { sprite_rect.left - camera_rect.left, sprite_rect.top - camera_rect.top };
 			sprite_component->sprite.setPosition(relative_position.x, relative_position.y);
-			window->draw(sprite_component->sprite);
+			//window->draw(sprite_component->sprite);
+			to_draw.push_front(&sprite_component->sprite);
 		}
+	}
+
+	// order sprites to draw (to create depth visual effect)
+	to_draw.sort(
+		[] (const sf::Sprite* a, const sf::Sprite* b)
+		{
+			return a->getPosition().y + a->getTextureRect().height < b->getPosition().y + b->getTextureRect().height;
+		}
+	);
+
+	// draw the camera-captured sprites with correct order
+	for (sf::Sprite* sprite : to_draw)
+	{
+		window->draw(*sprite);
 	}
 	
 	current_level->ecs_system.refresh();
