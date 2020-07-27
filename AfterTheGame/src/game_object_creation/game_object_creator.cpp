@@ -45,13 +45,13 @@ static void create_horse(
 	auto& horse = ecs_system.add_entity();
 	horse.add_component<TransformComponent>(HORSE_SPEED, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
 	
-	auto& sprite = horse.add_component<SpriteComponent>(texture, sf::Vector2f(HORSE_WIDTH * scale, HORSE_HEIGHT * scale));
+	auto& sprite = horse.add_component<SpriteComponent>(texture, HORSE_SIZE * scale);
 	sprites.push_back(&sprite);
 
 	static std::map<unsigned int, unsigned int> horse_animation_indecies_frames = { { 0, 7 }, { 1, 6 },{ 2, 6 } };
 	horse.add_component<AnimationComponent>(texture, horse_animation_indecies_frames, 500.0f);
 
-	auto& horse_collider = horse.add_component<ColliderComponent>(HORSE_WIDTH * scale, HORSE_HEIGHT * scale, "horse");
+	auto& horse_collider = horse.add_component<ColliderComponent>(HORSE_HITBOX.x * scale, HORSE_HITBOX.y * scale, "horse", HORSE_HITBOX_OFFSET);
 	colliders.push_back(&horse_collider);
 
 	horse.add_component<ScriptComponent>(horse_script, colliders);
@@ -69,10 +69,10 @@ static void create_gun(
 	auto& gun = ecs_system.add_entity();
 	gun.add_component<TransformComponent>(0.0f, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
 
-	auto& sprite = gun.add_component<SpriteComponent>(texture, sf::Vector2f(GUN_WIDTH * scale, GUN_HEIGHT * scale));
+	auto& sprite = gun.add_component<SpriteComponent>(texture, GUN_SIZE * scale);
 	sprites.push_back(&sprite);
 
-	auto& gun_collider = gun.add_component<ColliderComponent>(GUN_WIDTH * scale, GUN_HEIGHT * scale, "gun");
+	auto& gun_collider = gun.add_component<ColliderComponent>(GUN_HITBOX.x * scale, GUN_HITBOX.x * scale, "gun", GUN_HITBOX_OFFSET);
 	colliders.push_back(&gun_collider);
 
 	//gun.add_component<ScriptComponent>(gun_script, colliders);
@@ -90,10 +90,10 @@ static void create_medpack(
 	auto& medpack = ecs_system.add_entity();
 	medpack.add_component<TransformComponent>(0.0f, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
 	
-	auto& sprite = medpack.add_component<SpriteComponent>(texture, sf::Vector2f(MEDPACK_WIDTH * scale, MEDPACK_HEIGHT * scale));
+	auto& sprite = medpack.add_component<SpriteComponent>(texture, MEDPACK_SIZE * scale);
 	sprites.push_back(&sprite);
 
-	auto& medpack_collider = medpack.add_component<ColliderComponent>(MEDPACK_WIDTH * scale, MEDPACK_HEIGHT * scale, "medpack");
+	auto& medpack_collider = medpack.add_component<ColliderComponent>(MEDPACK_HITBOX.x * scale, MEDPACK_HITBOX.y * scale, "medpack", MEDPACK_HITBOX_OFFSET);
 	colliders.push_back(&medpack_collider);
 
 	//medpack.add_component<ScriptComponent>(medpack_script, colliders);
@@ -138,11 +138,11 @@ void spawn_game_objects(LevelData& level, std::vector<ColliderComponent*>& colli
 		{
 			if (collision_map.at(i).at(j) == '1')
 			{
-				create_solid_tile(level, colliders, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
+				create_solid_tile(level, colliders, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, SCALE);
 			}
 			else
 			{
-				create_tile(level, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, 1.0f);
+				create_tile(level, textures[textures_dictionary[tilemap.at(i).at(j)]], { j, i }, SCALE);
 			}
 		}
 	}
@@ -153,19 +153,19 @@ void spawn_game_objects(LevelData& level, std::vector<ColliderComponent*>& colli
 		{
 		case HORSE: {
 			load_texture_if_needed(textures, "resources/horse_sheet.png");
-			create_horse(level.ecs_system, colliders, sprites, textures["resources/horse_sheet.png"], spawn_data.position, 1.0f);
+			create_horse(level.ecs_system, colliders, sprites, textures["resources/horse_sheet.png"], spawn_data.position, SCALE);
 		} break;
 		case GUN: {
 			load_texture_if_needed(textures, "resources/gun.png");
-			create_gun(level.ecs_system, colliders, sprites, textures["resources/gun.png"], spawn_data.position, 1.0f);
+			create_gun(level.ecs_system, colliders, sprites, textures["resources/gun.png"], spawn_data.position, SCALE);
 		} break;
 		case MEDPACK: {
 			load_texture_if_needed(textures, "resources/med_pack.png");
-			create_medpack(level.ecs_system, colliders, sprites, textures["resources/med_pack.png"], spawn_data.position, 1.0f);
+			create_medpack(level.ecs_system, colliders, sprites, textures["resources/med_pack.png"], spawn_data.position, SCALE);
 		} break;
 		default: {
 			load_texture_if_needed(textures, "resources/unknown.png");
-			create_unknown(level.ecs_system, sprites, textures["resources/unknown.png"], spawn_data.position, 1.0f);
+			create_unknown(level.ecs_system, sprites, textures["resources/unknown.png"], spawn_data.position, SCALE);
 		}
 		}
 	}

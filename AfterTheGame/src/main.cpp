@@ -73,9 +73,9 @@ void init(sf::RenderWindow* window)
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<TransformComponent>(0.8f, sf::Vector2f(300.0f, 300.0f));
+	player.add_component<TransformComponent>(PLAYER_SPEED, sf::Vector2f(300.0f * SCALE, 300.0f * SCALE));
 	
-	auto& sprite = player.add_component<SpriteComponent>(textures["resources/guy.png"], sf::Vector2f(PLAYER_SIZE));
+	auto& sprite = player.add_component<SpriteComponent>(textures["resources/guy.png"], PLAYER_SIZE * SCALE);
 	sprites.push_back(&sprite);
 
 	player.add_component<MoveControlComponent>();
@@ -83,7 +83,7 @@ void init(sf::RenderWindow* window)
 	std::map<unsigned int, unsigned int> player_animation_indecies_frames = { { 0, 3 },{ 1, 3 }, { 2, 3 },{ 3, 3 },{ 4, 3 } };
 	player.add_component<AnimationComponent>(textures["resources/guy.png"], player_animation_indecies_frames, 500.0f);
 	
-	auto& player_collider = player.add_component<ColliderComponent>(PLAYER_HITBOX.x, PLAYER_HITBOX.y, "player", PLAYER_HITBOX_OFFSET);
+	auto& player_collider = player.add_component<ColliderComponent>(PLAYER_HITBOX.x * SCALE, PLAYER_HITBOX.y * SCALE, "player", PLAYER_HITBOX_OFFSET * SCALE);
 	colliders.push_back(&player_collider);
 
 	player.add_component<ScriptComponent>(player_script, colliders);

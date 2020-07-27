@@ -14,7 +14,6 @@
 
 #include "../assets_managing/assets_manager.h"
 
-//#include "../scripts/box.h"
 #include "../scripts/horse.h"
 
 
@@ -28,21 +27,27 @@ enum GameObjectID
 	MEDPACK
 };
 
+#define SCALE (1.0f)
+
 #define TILE_SIZE (64.0f)
 
+#define PLAYER_SPEED (0.7f)
 #define PLAYER_SIZE (sf::Vector2f(32.0f, 64.0f))
 #define PLAYER_HITBOX (sf::Vector2f(32.0f, 32.0f))
 #define PLAYER_HITBOX_OFFSET (sf::Vector2f(0.0f, -32.0f))
 
 #define HORSE_SPEED (0.3f)
-#define HORSE_WIDTH (96.0f)
-#define HORSE_HEIGHT (64.0f)
+#define HORSE_SIZE (sf::Vector2f(96.0f, 64.0f))
+#define HORSE_HITBOX (sf::Vector2f(96.0f, 48.0f))
+#define HORSE_HITBOX_OFFSET (sf::Vector2f(0.0f, 16.0f))
 
-#define GUN_WIDTH (16.0f)
-#define GUN_HEIGHT (16.0f)
+#define GUN_SIZE (sf::Vector2f(16.0f, 16.0f))
+#define GUN_HITBOX (sf::Vector2f(16.0f, 16.0f))
+#define GUN_HITBOX_OFFSET (sf::Vector2f(16.0f, 16.0f))
 
-#define MEDPACK_WIDTH (32.0f)
-#define MEDPACK_HEIGHT (16.0f)
+#define MEDPACK_SIZE (sf::Vector2f(32.0f, 16.0f))
+#define MEDPACK_HITBOX (sf::Vector2f(32.0f, 16.0f))
+#define MEDPACK_HITBOX_OFFSET (sf::Vector2f(32.0f, 16.0f))
 
 
 static void create_tile(
