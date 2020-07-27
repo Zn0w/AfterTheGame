@@ -30,8 +30,9 @@ enum GameObjectID
 
 #define TILE_SIZE (64.0f)
 
-#define PLAYER_WIDTH (32.0f)
-#define PLAYER_HEIGHT (64.0f)
+#define PLAYER_SIZE (sf::Vector2f(32.0f, 64.0f))
+#define PLAYER_HITBOX (sf::Vector2f(32.0f, 32.0f))
+#define PLAYER_HITBOX_OFFSET (sf::Vector2f(0.0f, -32.0f))
 
 #define HORSE_SPEED (0.3f)
 #define HORSE_WIDTH (96.0f)
@@ -45,13 +46,13 @@ enum GameObjectID
 
 
 static void create_tile(
-	ecs::System& ecs_system,
+	LevelData& level,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
 );
 static void create_solid_tile(
-	ecs::System& ecs_system,
+	LevelData& level,
 	std::vector<ColliderComponent*>& colliders,
 	sf::Texture* texture,
 	sf::Vector2i position,
@@ -60,6 +61,7 @@ static void create_solid_tile(
 static void create_horse(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
+	std::vector<SpriteComponent*>& sprites,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -67,6 +69,7 @@ static void create_horse(
 static void create_gun(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
+	std::vector<SpriteComponent*>& sprites,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -74,12 +77,14 @@ static void create_gun(
 static void create_medpack(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
+	std::vector<SpriteComponent*>& sprites,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
 );
 static void create_unknown(
 	ecs::System& ecs_system,
+	std::vector<SpriteComponent*>& sprites,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -88,5 +93,6 @@ static void create_unknown(
 void spawn_game_objects(
 	LevelData& level,
 	std::vector<ColliderComponent*>& colliders,
+	std::vector<SpriteComponent*>& sprites,
 	std::map<std::string, sf::Texture*>& textures
 );

@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../ecs/system.h"
+#include "../components/sprite.h"
 
 
 struct SpawnData
@@ -23,7 +24,10 @@ struct LevelData
 	std::vector<std::string> collision_map;
 	std::map<char, std::string> textures_dictionary;
 	std::vector<SpawnData> spawns;
+	
 	ecs::System ecs_system;
+
+	std::vector<SpriteComponent*> tiles_sprites;
 
 
 	LevelData() {}
