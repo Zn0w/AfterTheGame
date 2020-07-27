@@ -42,7 +42,9 @@ static void create_horse(
 	auto& horse = ecs_system.add_entity();
 	horse.add_component<TransformComponent>(HORSE_SPEED, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
 	horse.add_component<SpriteComponent>(renderer, texture, sf::Vector2f(HORSE_WIDTH * scale, HORSE_HEIGHT * scale));
-	horse.add_component<AnimationComponent>(renderer, texture, 1, 7, 500.0f);
+	
+	static std::map<unsigned int, unsigned int> horse_animation_indecies_frames = { { 0, 7 }, { 1, 6 },{ 2, 6 } };
+	horse.add_component<AnimationComponent>(renderer, texture, horse_animation_indecies_frames, 500.0f);
 
 	auto& horse_collider = horse.add_component<ColliderComponent>(HORSE_WIDTH * scale, HORSE_HEIGHT * scale, "horse");
 	colliders.push_back(&horse_collider);
@@ -139,21 +141,19 @@ void spawn_game_objects(LevelData& level, std::vector<ColliderComponent*>& colli
 		switch (spawn_data.id)
 		{
 		case HORSE: {
-			load_texture_if_needed(textures, "resources/horse_idle_cycle_test.png");
-			
-			create_horse(level.ecs_system, colliders, renderer, textures["resources/horse_idle_cycle_test.png"], spawn_data.position, 1.0f);
+			load_texture_if_needed(textures, "resources/horse_sheet.png");
+			create_horse(level.ecs_system, colliders, renderer, textures["resources/horse_sheet.png"], spawn_data.position, 1.0f);
 		} break;
 		case GUN: {
 			load_texture_if_needed(textures, "resources/gun.png");
-
 			create_gun(level.ecs_system, colliders, renderer, textures["resources/gun.png"], spawn_data.position, 1.0f);
 		} break;
 		case MEDPACK: {
 			load_texture_if_needed(textures, "resources/med_pack.png");
-
 			create_medpack(level.ecs_system, colliders, renderer, textures["resources/med_pack.png"], spawn_data.position, 1.0f);
 		} break;
 		default: {
+			load_texture_if_needed(textures, "resources/unknown.png");
 			create_unknown(level.ecs_system, renderer, textures["resources/unknown.png"], spawn_data.position, 1.0f);
 		}
 		}

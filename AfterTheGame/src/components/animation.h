@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include <SFML/Graphics.hpp>
 
 #include "../ecs/system.h"
@@ -11,8 +13,9 @@ struct AnimationComponent : public ecs::Component
 	sf::RenderWindow* renderer;
 	sf::Texture* texture;
 
-	int indecies;	// a number of animations in a texture
-	int frames;		// a number of frames in an index
+	//int indecies;	// a number of animations in a texture
+	//int frames;		// a number of frames in an index
+	std::map<unsigned int, unsigned int> indecies_frames;
 	float speed;	// frequency with which a frame is changed, in milliseconds
 
 	SpriteComponent* sprite_component;
@@ -25,8 +28,8 @@ struct AnimationComponent : public ecs::Component
 	int frame_direction = 1;
 
 
-	AnimationComponent(sf::RenderWindow* s_renderer, sf::Texture* s_texture, int s_indecies, int s_frames, float s_speed)
-		: renderer(s_renderer), texture(s_texture), indecies(s_indecies), frames(s_frames), speed(s_speed)
+	AnimationComponent(sf::RenderWindow* s_renderer, sf::Texture* s_texture, std::map<unsigned int, unsigned int> s_indecies_frames, float s_speed)
+		: renderer(s_renderer), texture(s_texture), indecies_frames(s_indecies_frames), speed(s_speed)
 	{}
 
 	void init() override
@@ -38,8 +41,15 @@ struct AnimationComponent : public ecs::Component
 
 		sprite_component = &entity->get_component<SpriteComponent>();
 
+		// find index with max frames
+		unsigned int max_frames = 0;
+		for (auto& i : indecies_frames)
+		{
+			if (i.second > max_frames)
+				max_frames = i.second;
+		}
 		sf::Vector2u texture_size = texture->getSize();
-		frame_size = { texture_size.x / frames, texture_size.y / indecies };
+		frame_size = { texture_size.x / max_frames, texture_size.y / indecies_frames.size() };
 
 		sprite_component->sprite.setScale(sprite_component->size.x / frame_size.x, sprite_component->size.y / frame_size.y);
 	}
@@ -50,7 +60,7 @@ struct AnimationComponent : public ecs::Component
 		if (delta_count >= speed)
 		{
 
-			if (current_frame == frames || current_frame == -1)
+			if (current_frame == indecies_frames[current_index] || current_frame == -1)
 			{
 				frame_direction *= -1;
 				current_frame += frame_direction;

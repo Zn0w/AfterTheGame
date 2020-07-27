@@ -59,14 +59,6 @@ void init(sf::RenderWindow* window)
 	}
 	else
 		textures.insert(std::pair<std::string, sf::Texture*>("resources/hero.png", hero_texture));
-
-	sf::Texture* unknown_texture = new sf::Texture;
-	if (!unknown_texture->loadFromFile("resources/unknown.png"))
-	{
-		std::cout << "Failed to load the unknown texture" << std::endl;
-	}
-	else
-		textures.insert(std::pair<std::string, sf::Texture*>("resources/unknown.png", unknown_texture));
 	
 	if (!get_initial_level_data("resources/intro_level_01.aft_level", textures, levels))
 	{
