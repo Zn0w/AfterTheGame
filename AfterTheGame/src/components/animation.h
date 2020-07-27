@@ -10,7 +10,6 @@
 
 struct AnimationComponent : public ecs::Component
 {
-	sf::RenderWindow* renderer;
 	sf::Texture* texture;
 
 	//int indecies;	// a number of animations in a texture
@@ -31,8 +30,8 @@ private:
 
 public:
 
-	AnimationComponent(sf::RenderWindow* s_renderer, sf::Texture* s_texture, std::map<unsigned int, unsigned int> s_indecies_frames, float s_speed)
-		: renderer(s_renderer), texture(s_texture), indecies_frames(s_indecies_frames), speed(s_speed)
+	AnimationComponent(sf::Texture* s_texture, std::map<unsigned int, unsigned int> s_indecies_frames, float s_speed)
+		: texture(s_texture), indecies_frames(s_indecies_frames), speed(s_speed)
 	{}
 
 	void change_index(unsigned int index)
@@ -47,7 +46,7 @@ public:
 	{
 		if (!entity->has_component<SpriteComponent>())
 		{
-			entity->add_component<SpriteComponent>(renderer, texture, sf::Vector2f(0.0f, 0.0f));
+			entity->add_component<SpriteComponent>(texture, sf::Vector2f(0.0f, 0.0f));
 		}
 
 		sprite_component = &entity->get_component<SpriteComponent>();

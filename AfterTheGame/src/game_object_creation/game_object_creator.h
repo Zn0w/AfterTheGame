@@ -46,7 +46,6 @@ enum GameObjectID
 
 static void create_tile(
 	ecs::System& ecs_system,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -54,7 +53,6 @@ static void create_tile(
 static void create_solid_tile(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -62,7 +60,6 @@ static void create_solid_tile(
 static void create_horse(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -70,7 +67,6 @@ static void create_horse(
 static void create_gun(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -78,14 +74,12 @@ static void create_gun(
 static void create_medpack(
 	ecs::System& ecs_system,
 	std::vector<ColliderComponent*>& colliders,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
 );
 static void create_unknown(
 	ecs::System& ecs_system,
-	sf::RenderWindow* renderer,
 	sf::Texture* texture,
 	sf::Vector2i position,
 	float scale
@@ -94,6 +88,5 @@ static void create_unknown(
 void spawn_game_objects(
 	LevelData& level,
 	std::vector<ColliderComponent*>& colliders,
-	sf::RenderWindow* renderer,
 	std::map<std::string, sf::Texture*>& textures
 );
