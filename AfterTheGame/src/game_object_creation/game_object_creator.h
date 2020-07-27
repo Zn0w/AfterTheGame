@@ -10,6 +10,7 @@
 #include "../components/move_control.h"
 #include "../components/collider.h"
 #include "../components/script.h"
+#include "../components/animation.h"
 
 #include "../assets_managing/assets_manager.h"
 
@@ -33,7 +34,7 @@ enum GameObjectID
 #define PLAYER_HEIGHT (64.0f)
 
 #define HORSE_SPEED (0.3f)
-#define HORSE_WIDTH (64.0f)
+#define HORSE_WIDTH (96.0f)
 #define HORSE_HEIGHT (64.0f)
 
 #define GUN_WIDTH (16.0f)

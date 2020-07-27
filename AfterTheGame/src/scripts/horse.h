@@ -11,7 +11,7 @@ inline void horse_script(ecs::Entity* entity, std::vector<ColliderComponent*>& c
 	static TransformComponent* transform_component = &entity->get_component<TransformComponent>();
 	static ColliderComponent* collider = &entity->get_component<ColliderComponent>();
 
-	transform_component->velocity = { 1.0f, 0.0f };
+	//transform_component->velocity = { 1.0f, 0.0f };
 
 	for (ColliderComponent* c : colliders)
 	{
