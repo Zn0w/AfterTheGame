@@ -49,7 +49,7 @@ static void create_horse(
 	auto& horse_collider = horse.add_component<ColliderComponent>(HORSE_WIDTH * scale, HORSE_HEIGHT * scale, "horse");
 	colliders.push_back(&horse_collider);
 
-	horse.add_component<ScriptComponent>(horse_script, colliders);
+	//horse.add_component<ScriptComponent>(horse_script, colliders);
 }
 
 static void create_gun(

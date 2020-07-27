@@ -40,7 +40,7 @@ public:
 		current_index = index;
 		current_frame = 0;
 		frame_direction = 1;
-		//delta_count = 0.0f;
+		delta_count = speed;
 	}
 
 	void init() override
