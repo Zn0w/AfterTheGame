@@ -43,7 +43,7 @@ static void create_horse(
 )
 {
 	auto& horse = ecs_system.add_entity();
-	horse.add_component<TransformComponent>(HORSE_SPEED, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
+	horse.add_component<TransformComponent>(HORSE_SPEED * scale, sf::Vector2f(position.x * TILE_SIZE * scale, position.y * TILE_SIZE * scale));
 	
 	auto& sprite = horse.add_component<SpriteComponent>(texture, HORSE_SIZE * scale);
 	sprites.push_back(&sprite);

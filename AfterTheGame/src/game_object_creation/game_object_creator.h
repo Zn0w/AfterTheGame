@@ -27,7 +27,7 @@ enum GameObjectID
 	MEDPACK
 };
 
-#define SCALE (1.0f)
+#define SCALE (2.0f)
 
 #define TILE_SIZE (64.0f)
 

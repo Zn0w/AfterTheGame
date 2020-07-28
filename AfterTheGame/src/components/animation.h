@@ -20,6 +20,7 @@ struct AnimationComponent : public ecs::Component
 	SpriteComponent* sprite_component;
 
 	sf::Vector2u frame_size;
+	sf::Vector2f scale;
 
 	int current_frame = 0;
 	float delta_count = 0.0f;
@@ -59,9 +60,10 @@ public:
 				max_frames = i.second;
 		}
 		sf::Vector2u texture_size = texture->getSize();
-		frame_size = { texture_size.x / max_frames, texture_size.y / indecies_frames.size() };
+		frame_size = { texture_size.x / max_frames, texture_size.y / indecies_frames.size() }; 
 
-		sprite_component->sprite.setScale(sprite_component->size.x / frame_size.x, sprite_component->size.y / frame_size.y);
+		scale = { sprite_component->size.x / frame_size.x, sprite_component->size.y / frame_size.y };
+		sprite_component->sprite.setScale(scale);
 	}
 
 	void update(float delta) override
@@ -77,7 +79,7 @@ public:
 			}
 			
 			sf::Vector2f sprite_size = sprite_component->size;
-			sprite_component->sprite.setTextureRect(sf::IntRect(frame_size.x * current_frame, frame_size.y * current_index, (int)sprite_size.x, (int)sprite_size.y));
+			sprite_component->sprite.setTextureRect(sf::IntRect(frame_size.x * current_frame, frame_size.y * current_index, (int)frame_size.x, (int)frame_size.y));
 
 			current_frame += frame_direction;
 

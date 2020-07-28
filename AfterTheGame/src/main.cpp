@@ -73,7 +73,7 @@ void init(sf::RenderWindow* window)
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<TransformComponent>(PLAYER_SPEED, sf::Vector2f(300.0f * SCALE, 300.0f * SCALE));
+	player.add_component<TransformComponent>(PLAYER_SPEED * SCALE, sf::Vector2f(300.0f * SCALE, 300.0f * SCALE));
 	
 	auto& sprite = player.add_component<SpriteComponent>(textures["resources/guy.png"], PLAYER_SIZE * SCALE);
 	sprites.push_back(&sprite);
@@ -156,7 +156,7 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 	to_draw.sort(
 		[] (const sf::Sprite* a, const sf::Sprite* b)
 		{
-			return a->getPosition().y + a->getTextureRect().height < b->getPosition().y + b->getTextureRect().height;
+			return a->getPosition().y + a->getTextureRect().height * a->getScale().y < b->getPosition().y + b->getTextureRect().height * b->getScale().y;
 		}
 	);
 
