@@ -43,6 +43,21 @@ struct LevelData
 	}
 };
 
+enum FontType
+{
+	DEBUG_FONT,
+	DIALOG_FONT,
+	MAIN_MENU_FONT
+};
+
+struct FontLoadResult
+{
+	bool success;
+	sf::Font font;
+};
+
+
+FontLoadResult load_font(std::string path);
 
 bool load_texture(std::string path, std::map<std::string, sf::Texture*>& textures);
 

@@ -31,7 +31,7 @@ enum GameObjectID
 
 #define TILE_SIZE (64.0f)
 
-#define PLAYER_SPEED (0.7f)
+#define PLAYER_SPEED (0.3f)
 #define PLAYER_SIZE (sf::Vector2f(32.0f, 64.0f))
 #define PLAYER_HITBOX (sf::Vector2f(32.0f, 32.0f))
 #define PLAYER_HITBOX_OFFSET (sf::Vector2f(0.0f, -32.0f))

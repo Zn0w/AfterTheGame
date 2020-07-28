@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include <list>
+#include <cassert>
 
 #include <SFML/Graphics.hpp>
 
@@ -39,10 +40,10 @@ LevelData* current_level = 0;
 std::vector<ColliderComponent*> colliders;
 std::vector<SpriteComponent*> sprites;
 
+std::map<FontType, sf::Font> fonts;
 std::map<std::string, sf::Texture*> textures;
 std::map<std::string, LevelData> levels;
 
-sf::Font font;
 sf::Text debug_text;
 
 
@@ -50,18 +51,11 @@ void init(sf::RenderWindow* window)
 {
 	running = true;
 
-	if (!font.loadFromFile("resources/sansation.ttf"))
-	{
-		// error...
-	}
+	FontLoadResult result = load_font("resources/sansation.ttf");
+	assert(result.success);
+	fonts.insert(std::pair<FontType, sf::Font>(DEBUG_FONT, result.font));
 
-	sf::Texture* hero_texture = new sf::Texture;
-	if (!hero_texture->loadFromFile("resources/guy.png"))
-	{
-		std::cout << "Failed to load the guy texture" << std::endl;
-	}
-	else
-		textures.insert(std::pair<std::string, sf::Texture*>("resources/guy.png", hero_texture));
+	assert(load_texture("resources/guy.png", textures));
 	
 	if (!get_initial_level_data("resources/intro_level_01.aft_level", textures, levels))
 	{
@@ -73,7 +67,7 @@ void init(sf::RenderWindow* window)
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
-	player.add_component<TransformComponent>(PLAYER_SPEED * SCALE, sf::Vector2f(300.0f * SCALE, 300.0f * SCALE));
+	player.add_component<TransformComponent>(PLAYER_SPEED * SCALE, sf::Vector2f(2500.0f * SCALE, 2500.0f * SCALE));
 	
 	auto& sprite = player.add_component<SpriteComponent>(textures["resources/guy.png"], PLAYER_SIZE * SCALE);
 	sprites.push_back(&sprite);
@@ -91,7 +85,7 @@ void init(sf::RenderWindow* window)
 	// top & left are offsets relative to the player position
 	camera = { -800.0f, -450.0f, 1600.0f, 900.0f };
 
-	debug_text.setFont(font);
+	debug_text.setFont(fonts[DEBUG_FONT]);
 	debug_text.setCharacterSize(16);
 	debug_text.setFillColor(sf::Color::Red);
 	debug_text.setPosition(0, 0);

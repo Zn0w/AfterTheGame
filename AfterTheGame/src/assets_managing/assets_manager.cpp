@@ -1,6 +1,20 @@
 #include "assets_manager.h"
 
 
+FontLoadResult load_font(std::string path)
+{
+	FontLoadResult result;
+	if (!result.font.loadFromFile(path))
+	{
+		std::cout << "Failed to load font (" << path << ")" << std::endl;
+		result.success = false;
+	}
+	std::cout << "The font is successfully loaded (" << path << ")" << std::endl;
+	result.success = true;
+
+	return result;
+}
+
 bool load_texture(std::string path, std::map<std::string, sf::Texture*>& textures)
 {
 	sf::Texture* texture = new sf::Texture;
