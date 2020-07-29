@@ -51,12 +51,19 @@ void init(sf::RenderWindow* window)
 {
 	running = true;
 
+	// load fonts
 	FontLoadResult result = load_font("resources/sansation.ttf");
 	assert(result.success);
 	fonts.insert(std::pair<FontType, sf::Font>(DEBUG_FONT, result.font));
 
+	result = load_font("resources/montserrat/Montserrat-Regular.ttf");
+	assert(result.success);
+	fonts.insert(std::pair<FontType, sf::Font>(DIALOG_FONT, result.font));
+
+	// load player spritesheet
 	assert(load_texture("resources/guy.png", textures));
 	
+	// load the intro level
 	if (!get_initial_level_data("resources/intro_level_01.aft_level", textures, levels))
 	{
 		std::cout << "Failed to load the intro level" << std::endl;
