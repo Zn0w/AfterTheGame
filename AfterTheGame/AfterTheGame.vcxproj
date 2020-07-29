@@ -155,6 +155,7 @@
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\system.h" />
     <ClInclude Include="src\game_object_creation\game_object_creator.h" />
+    <ClInclude Include="src\game_state\game_state.h" />
     <ClInclude Include="src\scripts\box.h" />
     <ClInclude Include="src\scripts\collision.h" />
     <ClInclude Include="src\scripts\horse.h" />
