@@ -146,6 +146,7 @@
     <ClInclude Include="src\components\animation.h" />
     <ClInclude Include="src\components\collider.h" />
     <ClInclude Include="src\components\dialog.h" />
+    <ClInclude Include="src\components\game_state_control.h" />
     <ClInclude Include="src\components\move_control.h" />
     <ClInclude Include="src\components\script.h" />
     <ClInclude Include="src\components\transform.h" />

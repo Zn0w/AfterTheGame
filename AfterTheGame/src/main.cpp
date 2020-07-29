@@ -16,6 +16,7 @@
 #include "components/collider.h"
 #include "components/script.h"
 #include "components/animation.h"
+#include "components/game_state_control.h"
 
 #include "scripts/collision.h"
 
@@ -43,6 +44,9 @@ sf::Text debug_text;
 void init(sf::RenderWindow* window)
 {
 	game_state.running = true;
+
+	auto& game_state_control_entity = ecs_system.add_entity();
+	game_state_control_entity.add_component<GameStateControlComponent>(game_state);
 
 	// load fonts
 	FontLoadResult result = load_font("resources/sansation.ttf");
