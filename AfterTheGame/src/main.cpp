@@ -16,7 +16,7 @@
 #include "components/collider.h"
 #include "components/script.h"
 #include "components/animation.h"
-#include "components/game_state_control.h"
+//#include "components/game_state_control.h"
 
 #include "scripts/collision.h"
 
@@ -44,9 +44,10 @@ sf::Text debug_text;
 void init(sf::RenderWindow* window)
 {
 	game_state.running = true;
+	game_state.phase = GAME_ACTION;
 
-	auto& game_state_control_entity = ecs_system.add_entity();
-	game_state_control_entity.add_component<GameStateControlComponent>(game_state);
+	//auto& game_state_control_entity = ecs_system.add_entity();
+	//game_state_control_entity.add_component<GameStateControlComponent>(game_state);
 
 	// load fonts
 	FontLoadResult result = load_font("resources/sansation.ttf");
@@ -203,13 +204,21 @@ int main()
 				window.close();
 				destroy();
 			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				if (event.key.code == sf::Keyboard::Escape)
+					if (game_state.phase == GAME_PAUSED)
+						game_state.phase = GAME_ACTION;
+					else
+						game_state.phase = GAME_PAUSED;
+			}
 		}
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
-		// draw everything here...
-		update_and_render(elapsed_time, &window);
+		if (game_state.phase == GAME_ACTION)
+			update_and_render(elapsed_time, &window);
 		
 		// display debug info
 		std::string debug_string = "FPS: " + std::to_string(1000.0f / elapsed_time) + "\n" +
