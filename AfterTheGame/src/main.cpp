@@ -56,7 +56,7 @@ void init(sf::RenderWindow* window)
 
 	result = load_font("resources/montserrat/Montserrat-Regular.ttf");
 	assert(result.success);
-	game_state.fonts.insert(std::pair<FontType, sf::Font>(DIALOG_FONT, result.font));
+	game_state.fonts.insert(std::pair<FontType, sf::Font>(DIALOGUE_FONT, result.font));
 
 	// load player spritesheet
 	assert(load_texture("resources/guy.png", game_state.textures));
@@ -165,12 +165,21 @@ void update_and_render(float elapsed_time, sf::RenderWindow* window)
 		window->draw(*sprite);
 	}
 	
-	game_state.current_level->ecs_system.refresh();
-	game_state.current_level->ecs_system.update(elapsed_time);
+	if (game_state.phase == GAME_IN_DIALOG)
+	{
+		DialoguePhrase dialogue_phrase = game_state.current_dialogue->current();
+		window->draw(dialogue_phrase.picture);
+		window->draw(dialogue_phrase.name);
+	}
+	else
+	{
+		game_state.current_level->ecs_system.refresh();
+		game_state.current_level->ecs_system.update(elapsed_time);
 
-	// global ecs_system is for player object and special objects that have something to do with the player
-	ecs_system.refresh();
-	ecs_system.update(elapsed_time);
+		// global ecs_system is for player object and special objects that have something to do with the player
+		ecs_system.refresh();
+		ecs_system.update(elapsed_time);
+	}
 }
 
 void destroy()
@@ -204,6 +213,8 @@ int main()
 				window.close();
 				destroy();
 			}
+			
+			// check for game state control events
 			else if (event.type == sf::Event::KeyReleased)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
@@ -211,21 +222,27 @@ int main()
 						game_state.phase = GAME_ACTION;
 					else
 						game_state.phase = GAME_PAUSED;
+
+				else if (event.key.code == sf::Keyboard::F1)
+					game_state.show_debug_info = !game_state.show_debug_info;
 			}
 		}
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
-		if (game_state.phase == GAME_ACTION)
+		if (game_state.phase != GAME_PAUSED)
 			update_and_render(elapsed_time, &window);
 		
 		// display debug info
-		std::string debug_string = "FPS: " + std::to_string(1000.0f / elapsed_time) + "\n" +
-			std::to_string(player.get_component<TransformComponent>().position.x) + ", " + std::to_string(player.get_component<TransformComponent>().position.y);
-		
-		debug_text.setString(debug_string);
-		window.draw(debug_text);
+		if (game_state.show_debug_info)
+		{
+			std::string debug_string = "FPS: " + std::to_string(1000.0f / elapsed_time) + "\n" +
+				std::to_string(player.get_component<TransformComponent>().position.x) + ", " + std::to_string(player.get_component<TransformComponent>().position.y);
+
+			debug_text.setString(debug_string);
+			window.draw(debug_text);
+		}
 
 		// end the current frame
 		window.display();

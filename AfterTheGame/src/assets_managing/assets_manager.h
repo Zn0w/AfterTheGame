@@ -46,7 +46,7 @@ struct LevelData
 enum FontType
 {
 	DEBUG_FONT,
-	DIALOG_FONT,
+	DIALOGUE_FONT,
 	MAIN_MENU_FONT
 };
 

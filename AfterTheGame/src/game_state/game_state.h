@@ -7,6 +7,7 @@
 
 #include "../components/collider.h"
 #include "../components/sprite.h"
+#include "../components/dialogue.h"
 #include "../assets_managing/assets_manager.h"
 
 
@@ -31,4 +32,8 @@ struct GameState
 	std::map<std::string, LevelData> levels;
 
 	GamePhase phase;
+
+	bool show_debug_info = false;
+
+	DialogueComponent* current_dialogue = 0;
 };
