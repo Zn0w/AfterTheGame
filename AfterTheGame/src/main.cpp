@@ -68,7 +68,7 @@ void init(sf::RenderWindow* window)
 	}
 
 	game_state.current_level = &game_state.levels["resources/intro_level_01.aft_level"];
-	spawn_game_objects(*game_state.current_level, game_state.colliders, game_state.sprites, game_state.textures);
+	spawn_game_objects(*game_state.current_level, game_state);
 
 	// load entities and components (init system)
 	//auto& player = ecs_system.add_entity();
@@ -85,7 +85,7 @@ void init(sf::RenderWindow* window)
 	auto& player_collider = player.add_component<ColliderComponent>(PLAYER_HITBOX.x * SCALE, PLAYER_HITBOX.y * SCALE, "player", PLAYER_HITBOX_OFFSET * SCALE);
 	game_state.colliders.push_back(&player_collider);
 
-	player.add_component<ScriptComponent>(player_script, game_state.colliders);
+	player.add_component<ScriptComponent>(new PlayerScript(game_state.colliders));
 
 	// top & left are offsets relative to the player position
 	camera = { -800.0f, -450.0f, 1600.0f, 900.0f };

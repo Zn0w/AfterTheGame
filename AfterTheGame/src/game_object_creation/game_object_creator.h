@@ -11,10 +11,12 @@
 #include "../components/collider.h"
 #include "../components/script.h"
 #include "../components/animation.h"
+#include "../components/dialogue.h"
 
 #include "../assets_managing/assets_manager.h"
 
 #include "../scripts/horse.h"
+#include "../scripts/guy_dealogue_test.h"
 
 
 enum GameObjectID
@@ -24,7 +26,8 @@ enum GameObjectID
 	SOLID_TILE,
 	HORSE,
 	GUN,
-	MEDPACK
+	MEDPACK,
+	GUY_DIALOGUE_TEST
 };
 
 #define SCALE (2.0f)
@@ -50,6 +53,10 @@ enum GameObjectID
 #define MEDPACK_SIZE (sf::Vector2f(32.0f, 16.0f))
 #define MEDPACK_HITBOX (sf::Vector2f(32.0f, 16.0f))
 #define MEDPACK_HITBOX_OFFSET (sf::Vector2f(32.0f, 16.0f))
+
+#define GUY_DIALOGUE_TEST_SIZE (sf::Vector2f(32.0f, 64.0f))
+#define GUY_DIALOGUE_TEST_HITBOX (sf::Vector2f(32.0f, 32.0f))
+#define GUY_DIALOGUE_TEST_HITBOX_OFFSET (sf::Vector2f(0.0f, -32.0f))
 
 
 static void create_tile(
@@ -89,6 +96,17 @@ static void create_medpack(
 	sf::Vector2i position,
 	float scale
 );
+static void create_guy_dialogue_test(
+	ecs::System& ecs_system,
+	std::vector<ColliderComponent*>& colliders,
+	std::vector<SpriteComponent*>& sprites,
+	std::map<FontType, sf::Font>& fonts,
+	GamePhase& game_phase,
+	DialogueComponent* current_dialogue,
+	sf::Texture* texture,
+	sf::Vector2i position,
+	float scale
+);
 static void create_unknown(
 	ecs::System& ecs_system,
 	std::vector<SpriteComponent*>& sprites,
@@ -99,7 +117,5 @@ static void create_unknown(
 
 void spawn_game_objects(
 	LevelData& level,
-	std::vector<ColliderComponent*>& colliders,
-	std::vector<SpriteComponent*>& sprites,
-	std::map<std::string, sf::Texture*>& textures
+	GameState& game_state
 );
